@@ -1,0 +1,572 @@
+{
+  "schemes": [
+    {
+      "id": "pm_kisan",
+      "name": "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)",
+      "name_hi": "प्रधानमंत्री किसान सम्मान निधि (पीएम-किसान)",
+      "ministry": "Ministry of Agriculture and Farmers Welfare",
+      "ministry_hi": "कृषि एवं किसान कल्याण मंत्रालय",
+      "purpose": "Income support to all landholding farmer families in the country to supplement financial needs for agricultural inputs and domestic needs.",
+      "purpose_hi": "सभी भूमिधारक किसान परिवारों को कृषि आदानों (खाद, बीज आदि) और घरेलू खर्चों में सहायता के लिए निश्चित आय सहायता प्रदान करना।",
+      "benefits": [
+        "Financial benefit of Rs. 6,000 per year per eligible farmer family.",
+        "Disbursed in 3 equal installments of Rs. 2,000 every 4 months (April-July, August-November, December-March).",
+        "Direct Benefit Transfer (DBT) straight into the farmer's Aadhaar-linked bank account without middlemen."
+      ],
+      "benefits_hi": [
+        "प्रत्येक पात्र किसान परिवार को प्रति वर्ष ₹6,000 की वित्तीय सहायता।",
+        "यह राशि ₹2,000 की 3 समान किस्तों में हर 4 महीने में सीधे बैंक खाते में भेजी जाती है।",
+        "सीधा बैंक अंतरण (DBT) द्वारा बिना किसी बिचौलिए के आधार से जुड़े बैंक खाते में भुगतान।"
+      ],
+      "eligibility": [
+        "All landholder farmer families having cultivable landholding in their names as per state/UT land records.",
+        "Both small and marginal farmers, as well as farmers with larger cultivable landholdings.",
+        "Mandatory active bank account linked with Aadhaar.",
+        "Completion of mandatory e-KYC (via OTP, Biometric at CSC, or Face Authentication on PM-KISAN Mobile App)."
+      ],
+      "eligibility_hi": [
+        "वे सभी किसान परिवार जिनके नाम पर राज्य के भू-अभिलेखों में कृषि योग्य भूमि दर्ज है।",
+        "छोटे, सीमांत और बड़े सभी वास्तविक किसान परिवार पात्र हैं।",
+        "बैंक खाता आधार और NPCI डीबीटी से लिंक होना अनिवार्य है।",
+        "अनिवार्य ई-केवाईसी (e-KYC) पूर्ण होना चाहिए (ओटीपी, सीएससी केंद्र या मोबाइल ऐप चेहरा प्रमाणीकरण द्वारा)।"
+      ],
+      "exclusions": [
+        "Institutional landholders.",
+        "Farmer families where any member holds or held constitutional posts (Ministers, MPs, MLAs, Mayors, Chairpersons of District Panchayats).",
+        "Serving or retired officers and employees of Central/State Government Ministries, Departments, and PSUs (except Class IV/Group D / multi-tasking staff).",
+        "All superannuated/retired pensioners whose monthly pension is Rs. 10,000/- or more (excluding Class IV/Group D).",
+        "All persons who paid Income Tax in the last assessment year.",
+        "Professionals like Doctors, Engineers, Lawyers, Chartered Accountants, and Architects registered with professional bodies."
+      ],
+      "exclusions_hi": [
+        "संस्थागत भूमि धारक (कंपनी या ट्रस्ट की ज़मीन)।",
+        "संवैधानिक पदों पर रहे या वर्तमान में कार्यरत सदस्य (मंत्री, सांसद, विधायक आदि)।",
+        "सरकारी कर्मचारी और अधिकारी (चतुर्थ श्रेणी / ग्रुप-डी / एमटीएस कर्मचारियों को छोड़कर)।",
+        "₹10,000 या अधिक मासिक पेंशन पाने वाले सेवानिवृत्त व्यक्ति (ग्रुप-डी छोड़कर)।",
+        "पिछले आकलन वर्ष में आयकर (Income Tax) भरने वाले व्यक्ति।",
+        "पंजीकृत पेशेवर जैसे डॉक्टर, इंजीनियर, वकील, चार्टर्ड अकाउंटेंट (CA)।"
+      ],
+      "required_documents": [
+        "Aadhaar Card (Mandatory / अनिवार्य)",
+        "Landholding Ownership Document / RoR / Khasra-Khatauni (खसरा-खतौनी की नकल)",
+        "Aadhaar-seeded Bank Account Passbook (आधार लिंक बैंक पासबुक)",
+        "Active Mobile Number linked to Aadhaar (आधार से जुड़ा सक्रिय मोबाइल नंबर)"
+      ],
+      "application_steps": [
+        "Step 1: Open the official portal https://pmkisan.gov.in and click 'New Farmer Registration'.",
+        "Step 2: Choose 'Rural Farmer Registration' or 'Urban Farmer Registration', enter Aadhaar number and mobile number, and select your State.",
+        "Step 3: Enter the OTP received on your mobile and complete Aadhaar authentication.",
+        "Step 4: Enter State, District, Sub-District, Block, and Village, along with Land Survey/Khatauni numbers and Land Transfer details.",
+        "Step 5: Upload supporting land ownership documents (PDF format) and submit the form.",
+        "Step 6: Alternatively, visit your nearest Common Service Centre (CSC) or Block Agriculture Office with your Aadhaar and Land records.",
+        "Step 7: Track application status under 'Status of Self Registered Farmer' on pmkisan.gov.in."
+      ],
+      "application_steps_hi": [
+        "चरण 1: आधिकारिक पोर्टल https://pmkisan.gov.in पर जाएं और 'New Farmer Registration' पर क्लिक करें।",
+        "चरण 2: 'Rural Farmer Registration' चुनें, अपना आधार नंबर, मोबाइल नंबर दर्ज करें और राज्य चुनें।",
+        "चरण 3: मोबाइल पर प्राप्त ओटीपी (OTP) दर्ज करें और आधार सत्यापन करें।",
+        "चरण 4: अपना ज़िला, ब्लॉक, गाँव और ज़मीन का खसरा/खतौनी नंबर एवं क्षेत्रफल भरें।",
+        "चरण 5: ज़मीन के दस्तावेज़ की कॉपी अपलोड करें और सबमिट करें।",
+        "चरण 6: यदि ऑनलाइन में कठिनाई हो तो नज़दीकी सीएससी (CSC / जन सेवा केंद्र) या कृषि कार्यालय जाकर पंजीकरण कराएं।",
+        "चरण 7: पोर्टल पर 'Status of Self Registered Farmer' में जाकर आवेदन की स्थिति जांचें।"
+      ],
+      "official_source": "https://pmkisan.gov.in/",
+      "application_url": "https://pmkisan.gov.in/RegistrationFormUpdated.aspx",
+      "helpline": "155261 / 011-24300606 / Toll Free 1800-115-526",
+      "last_verified": "2024-10-20",
+      "category": "agriculture_income_support",
+      "keywords": [
+        "किसान", "खेती", "आर्थिक सहायता", "6000", "सम्मान निधि", "रुपये", "खाद", "बीज", 
+        "farmer", "kisan", "financial help", "landowner", "kheti", "pm kisan", "income support"
+      ],
+      "critical_questions": [
+        "क्या आपके या आपके परिवार के नाम पर कृषि योग्य भूमि (खतौनी) दर्ज है?",
+        "क्या आप या परिवार का कोई सदस्य सरकारी सेवा या आयकर (Income Tax) के दायरे में है?",
+        "क्या आपका बैंक खाता आधार से लिंक (Aadhaar Seeded) है?"
+      ]
+    },
+    {
+      "id": "pmfby",
+      "name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+      "name_hi": "प्रधानमंत्री फसल बीमा योजना (पीएमएफबीवाई)",
+      "ministry": "Ministry of Agriculture and Farmers Welfare",
+      "ministry_hi": "कृषि एवं किसान कल्याण मंत्रालय",
+      "purpose": "Comprehensive insurance coverage and financial support to farmers suffering crop loss or damage arising out of unforeseen natural calamities like unseasonal rains, drought, flood, hailstorm, pest attack, and post-harvest losses.",
+      "purpose_hi": "बेमौसम बारिश, सूखा, बाढ़, ओलावृष्टि, कीट रोग या कटाई के बाद के प्राकृतिक नुकसान से प्रभावित किसानों को फसल सुरक्षा और वित्तीय मुआवजा प्रदान करना।",
+      "benefits": [
+        "Complete insurance coverage from pre-sowing to post-harvest losses.",
+        "Extremely low farmer premium share: Only 2.0% for Kharif food/oilseed crops, 1.5% for Rabi food/oilseed crops, and 5.0% for Annual Commercial/Horticultural crops.",
+        "The balance premium is subsidized up to 90%+ equally by the Central and State Governments.",
+        "Covers localized calamities (hailstorm, landslide, inundation, cloudburst) and post-harvest losses (up to 14 days after harvesting for crops kept in field in cut and spread condition).",
+        "Fast-track assessment using Crop Insurance App and satellite/remote sensing tech."
+      ],
+      "benefits_hi": [
+        "बुआई से लेकर फसल कटाई के बाद तक के प्राकृतिक नुकसान पर व्यापक बीमा सुरक्षा।",
+        "किसानों के लिए नाममात्र प्रीमियम: खरीफ फसलों (धान, मक्का आदि) के लिए मात्र 2%, रबी फसलों (गेहूं, चना आदि) के लिए 1.5%, और बागवानी/वाणिज्यिक फसलों के लिए 5%।",
+        "शेष 90%+ तक का प्रीमियम केंद्र और राज्य सरकार मिलकर वहन करती हैं।",
+        "स्थानीय आपदाओं (ओलावृष्टि, बेमौसम अत्यधिक बारिश/जलभराव, भूस्खलन) और कटाई के 14 दिन तक खेत में सूखने रखी फसल के नुकसान पर क्षतिपूर्ति।",
+        "क्रॉप इंश्योरेंस मोबाइल ऐप और ड्रोन/सैटेलाइट तकनीक से पारदर्शी नुकसान का आकलन।"
+      ],
+      "eligibility": [
+        "All farmers growing notified crops in notified insurance units/areas in participating States/UTs.",
+        "Both loanee farmers (holding Kisan Credit Card/crop loan from banks) and non-loanee farmers.",
+        "Tenant farmers, sharecroppers, and oral lessees are also eligible with proof of tenancy/sowing certificate.",
+        "CRITICAL DEADLINE FOR LOCALIZED CALAMITY / RAIN DAMAGE: Intimation of crop loss MUST be made within 72 HOURS of the natural event to the insurance company, bank, toll-free number 14447, or Crop Insurance App."
+      ],
+      "eligibility_hi": [
+        "वे सभी किसान जो अधिसूचित क्षेत्र (Notified Area) में अधिसूचित फसल (Notified Crop) उगाते हैं।",
+        "ऋणी किसान (KCC/बैंक से फसली ऋण धारक) और गैर-ऋणी किसान दोनों पात्र हैं।",
+        "बटाईदार (Sharecropper) और पट्टेदार किसान भी बुआई प्रमाण पत्र के साथ पात्र हैं।",
+        "अति महत्वपूर्ण समय सीमा: बेमौसम बारिश, ओलावृष्टि या बाढ़ से नुकसान होने पर घटना के 72 घंटे के भीतर सूचना देना अनिवार्य है (टोल-फ्री 14447, बैंक, बीमा कंपनी या क्रॉप इंश्योरेंस ऐप द्वारा)।"
+      ],
+      "exclusions": [
+        "War, nuclear risks, malicious damage, theft, or pilferage.",
+        "Domestic or wild animal attacks (unless specifically covered under state-specific localized add-ons).",
+        "Negligence or preventable risks where farmer failed to take standard precautions.",
+        "Crop damage reported after the mandatory 72-hour cut-off window for localized perils."
+      ],
+      "exclusions_hi": [
+        "मानव निर्मित कारण, दुर्भावनापूर्ण क्षति, चोरी या दंगे से हुआ नुकसान।",
+        "जंगली या आवारा जानवरों द्वारा नुकसान (जब तक राज्य ने विशेष राइडर न जोड़ा हो)।",
+        "किसान की लापरवाही या कीट प्रबंधन में भारी चूक।",
+        "स्थानीय आपदा की स्थिति में 72 घंटे की समय सीमा बीत जाने के बाद दी गई सूचना।"
+      ],
+      "required_documents": [
+        "Aadhaar Card of Farmer (किसान का आधार कार्ड)",
+        "Bank Passbook copy showing IFSC and Account Number (बैंक पासबुक की प्रति)",
+        "Land Record / Khasra-Khatauni / Patta document (भूमि अभिलेख / खसरा-खतौनी)",
+        "Sowing Certificate / Declaration issued by Patwari/Village Administrative Officer (बुआई प्रमाण पत्र / पटवारी घोषणा पत्र)",
+        "Tenant Agreement / Declaration (बटाईदार/किराएदार किसान होने पर शपथ पत्र)",
+        "Photographs of damaged crop / geotagged photos via Crop Insurance App (क्षतिग्रस्त फसल की तस्वीरें)"
+      ],
+      "application_steps": [
+        "Step 1: Check if your crop and district/gram panchayat are notified under PMFBY for the ongoing season.",
+        "Step 2: Non-loanee farmers must insure their crop BEFORE the cutoff date (usually July 31 for Kharif, December 31 for Rabi) on https://pmfby.gov.in, nearest bank branch, or CSC.",
+        "Step 3: If natural calamity (unseasonal heavy rain, hailstorm, waterlogging) occurs, IMMEDIATELY notify within 72 hours via Toll-Free Helpline 14447 or the 'Crop Insurance App' (Google Play Store).",
+        "Step 4: Keep policy/application number, survey number, crop name, date and cause of loss, and photographs ready.",
+        "Step 5: A joint survey committee (Insurance representative + State Agriculture Officer) conducts field assessment within 7-10 days.",
+        "Step 6: Approved claim amount is credited directly to the farmer's bank account."
+      ],
+      "application_steps_hi": [
+        "चरण 1: पहले पुष्टि करें कि आपकी फसल और आपका क्षेत्र चालू मौसम के लिए अधिसूचित (Notified) है।",
+        "चरण 2: गैर-ऋणी किसान बुआई की अंतिम तिथि से पहले https://pmfby.gov.in, बैंक शाखा या सीएससी पर प्रीमियम भरकर बीमा कराएं।",
+        "चरण 3: यदि बारिश, ओला या बाढ़ से नुकसान हुआ है, तो 72 घंटे के भीतर टोल-फ्री नंबर 14447 पर कॉल करें या 'Crop Insurance App' पर दावा दर्ज करें।",
+        "चरण 4: बीमा पॉलिसी नंबर, खसरा नंबर, फसल का नाम, नुकसान की तारीख और खेत की फोटो तैयार रखें।",
+        "चरण 5: कृषि विभाग और बीमा कंपनी का संयुक्त दल खेत पर आकर भौतिक सर्वे (Field Survey) करेगा।",
+        "चरण 6: सर्वे रिपोर्ट के आधार पर स्वीकृत मुआवजा सीधे आपके बैंक खाते में भेजा जाएगा।"
+      ],
+      "official_source": "https://pmfby.gov.in/",
+      "application_url": "https://pmfby.gov.in/farmerRegistrationForm",
+      "helpline": "14447 (National Toll Free Helpline / राष्ट्रीय किसान हेल्पलाइन)",
+      "last_verified": "2024-10-20",
+      "category": "agriculture_crop_insurance",
+      "keywords": [
+        "फसल", "बारिश", "नुकसान", "ओला", "ओलावृष्टि", "खराब", "बाढ़", "सूखा", "बीमा", "मुआवजा", 
+        "crop damage", "rain", "fasal kharab", "pmfby", "fasal bima", "hailstorm", "waterlogging", "insurance claim"
+      ],
+      "critical_questions": [
+        "आपकी फसल किस राज्य और ज़िले में है, तथा कौन सी फसल को नुकसान हुआ है?",
+        "क्या आपने इस फसल का बीमा (PMFBY या KCC के माध्यम से) कराया हुआ है?",
+        "नुकसान किस तारीख को हुआ है? (क्या 72 घंटे का समय शेष है?)"
+      ]
+    },
+    {
+      "id": "kcc",
+      "name": "Kisan Credit Card (KCC)",
+      "name_hi": "किसान क्रेडिट कार्ड (केसीसी)",
+      "ministry": "Ministry of Finance & Ministry of Agriculture",
+      "ministry_hi": "वित्त मंत्रालय एवं कृषि मंत्रालय",
+      "purpose": "To provide adequate and timely credit support from the banking system under a single window with flexible and simplified procedure to the farmers for their cultivation and other needs.",
+      "purpose_hi": "किसानों को खेती के खर्चों, बीज, खाद, कीटनाशक और कृषि उपकरणों की खरीद के लिए रियायती ब्याज दर पर समय पर आसान ऋण उपलब्ध कराना।",
+      "benefits": [
+        "Subsidized interest rate: Benchmark interest 7% per annum.",
+        "Prompt Repayment Incentive (PRI) of 3% per annum, reducing the effective interest rate to just 4% per annum for loans up to Rs. 3 Lakh.",
+        "Collateral-free agricultural loan up to Rs. 1.60 Lakh.",
+        "Revolving cash credit account with unlimited withdrawals and repayments within the sanctioned limit.",
+        "Card valid for 5 years with annual review.",
+        "Extended to Animal Husbandry, Dairy, and Fisheries farmers up to Rs. 2 Lakh."
+      ],
+      "benefits_hi": [
+        "सस्ता ऋण: सामान्य ब्याज दर 7% वार्षिक।",
+        "समय पर भुगतान करने पर 3% की अतिरिक्त छूट (सबवेंशन), जिससे ₹3 लाख तक के ऋण पर प्रभावी ब्याज मात्र 4% रह जाता है।",
+        "बिना किसी गारंटी (Collateral) के ₹1.60 लाख तक का ऋण उपलब्ध।",
+        "5 वर्ष की वैधता के साथ एटीएम/डेबिट कार्ड जैसी आसान निकासी सुविधा।",
+        "पशुपालन, डेयरी और मत्स्य पालन के लिए भी ₹2 लाख तक का केसीसी उपलब्ध।"
+      ],
+      "eligibility": [
+        "All owner cultivators and individual/joint borrowers.",
+        "Tenant farmers, oral lessees, and sharecroppers.",
+        "Self Help Groups (SHGs) or Joint Liability Groups (JLGs) of farmers.",
+        "Minimum age 18 years, maximum 75 years (co-borrower required if age above 60)."
+      ],
+      "eligibility_hi": [
+        "सभी भूमि स्वामी किसान (व्यक्तिगत या संयुक्त खातेदार)।",
+        "किराए पर खेती करने वाले, मौखिक पट्टेदार और बटाईदार किसान।",
+        "किसानों के स्वयं सहायता समूह (SHG) या संयुक्त देयता समूह (JLG)।",
+        "आयु 18 से 75 वर्ष (60 वर्ष से अधिक होने पर सह-आवेदक आवश्यक)।"
+      ],
+      "exclusions": [
+        "Willful loan defaulters with outstanding dues in commercial/cooperative/RRB banks.",
+        "Persons without verifiable agricultural/allied activities."
+      ],
+      "exclusions_hi": [
+        "किसी भी बैंक का जानबूझकर डिफ़ॉल्टर (Willful Defaulter)।",
+        "जिनके पास खेती या संबद्ध व्यवसाय का कोई प्रमाण न हो।"
+      ],
+      "required_documents": [
+        "Duly filled KCC Application Form (भरा हुआ केसीसी आवेदन पत्र)",
+        "Identity Proof: Aadhaar Card / Voter ID (पहचान पत्र)",
+        "Address Proof: Aadhaar Card / Electricity Bill (निवास प्रमाण पत्र)",
+        "Land Records: Khasra/Khatauni certified copy showing cultivable land (जमीन का खसरा-खतौनी)",
+        "Cropping Pattern / Sowing certificate (फसल बुआई का ब्यौरा)",
+        "No Dues Certificate (यदि आवश्यक हो तो अन्य बैंकों से अनापत्ति प्रमाण)"
+      ],
+      "application_steps": [
+        "Step 1: Download the standardized 1-page KCC application form from https://pmkisan.gov.in or https://www.myscheme.gov.in/schemes/kcc.",
+        "Step 2: Attach copies of Land Documents (Khasra/Khatauni), Aadhaar Card, and Bank passbook.",
+        "Step 3: Submit to your local Commercial Bank, Regional Rural Bank (RRB), or Cooperative Bank branch where you have a saving account.",
+        "Step 4: Bank is mandated to process KCC applications within 14 days of receipt of completed form.",
+        "Step 5: Collect your KCC Rupay Card and PIN from the branch."
+      ],
+      "application_steps_hi": [
+        "चरण 1: आधिकारिक पोर्टल या बैंक शाखा से 1-पेज का सरल केसीसी फॉर्म प्राप्त करें।",
+        "चरण 2: ज़मीन के दस्तावेज़ (खसरा-खतौनी), आधार कार्ड और बैंक पासबुक की प्रति संलग्न करें।",
+        "चरण 3: अपनी नज़दीकी बैंक शाखा (ग्रामीण बैंक, सहकारी बैंक या राष्ट्रीयकृत बैंक) में जमा करें।",
+        "चरण 4: सरकारी दिशा-निर्देशों के अनुसार बैंक को 14 दिनों के भीतर आवेदन पर निर्णय लेना होता है।",
+        "चरण 5: स्वीकृति के बाद बैंक से अपना केसीसी रुपे कार्ड प्राप्त करें।"
+      ],
+      "official_source": "https://www.myscheme.gov.in/schemes/kcc",
+      "application_url": "https://www.myscheme.gov.in/schemes/kcc",
+      "helpline": "1800-180-1551 (Kisan Call Center / किसान कॉल सेंटर)",
+      "last_verified": "2024-10-15",
+      "category": "agriculture_credit",
+      "keywords": [
+        "ऋण", "कर्ज", "लोन", "केसीसी", "किसान क्रेडिट कार्ड", "ब्याज", "खाद बीज लोन",
+        "kcc", "kisan credit card", "crop loan", "low interest loan", "karz", "kheti loan"
+      ],
+      "critical_questions": [
+        "क्या आपके पास अपनी या बटाई की खेती की ज़मीन है?",
+        "क्या आपका किसी बैंक में पहले से कोई बकाया फसली ऋण डिफ़ॉल्ट है?",
+        "आपको मुख्य रूप से किस फसल या पशुपालन कार्य के लिए ऋण की आवश्यकता है?"
+      ]
+    },
+    {
+      "id": "pm_kmy",
+      "name": "Pradhan Mantri Kisan Maandhan Yojana (PM-KMY)",
+      "name_hi": "प्रधानमंत्री किसान मानधन योजना (पीएम-केएमवाई)",
+      "ministry": "Ministry of Agriculture and Farmers Welfare",
+      "ministry_hi": "कृषि एवं किसान कल्याण मंत्रालय",
+      "purpose": "A voluntary and contributory pension scheme for Small and Marginal Farmers (SMF) to provide old-age social security and financial protection.",
+      "purpose_hi": "छोटे और सीमांत किसानों को वृद्धावस्था में सामाजिक सुरक्षा और वित्तीय सहारा प्रदान करने के लिए एक स्वैच्छिक पेंशन योजना।",
+      "benefits": [
+        "Assured minimum pension of Rs. 3,000 per month upon reaching the age of 60 years.",
+        "Equal monthly matching contribution by the Central Government to the pension fund.",
+        "Monthly contribution ranges between Rs. 55 to Rs. 200 depending on the entry age (18 to 40 years).",
+        "Option to have the monthly contribution deducted automatically from the PM-KISAN installment.",
+        "In case of death of the pensioner, the spouse receives 50% as family pension (Rs. 1,500/month)."
+      ],
+      "benefits_hi": [
+        "60 वर्ष की आयु पूरी होने पर ₹3,000 प्रति माह की निश्चित पेंशन।",
+        "जितना मासिक अंशदान किसान जमा करेगा, उतना ही बराबर अंशदान केंद्र सरकार अपनी ओर से पेंशन फंड में जमा करेगी।",
+        "प्रवेश आयु (18 से 40 वर्ष) के अनुसार मासिक अंशदान केवल ₹55 से ₹200 के बीच।",
+        "अंशदान को सीधे पीएम-किसान की ₹2000 वाली किस्त से कटवाने का आसान विकल्प।",
+        "किसान की मृत्यु की स्थिति में जीवनसाथी को 50% (₹1,500 प्रति माह) पारिवारिक पेंशन।"
+      ],
+      "eligibility": [
+        "Small and Marginal Farmers (SMF) owning cultivable land up to 2 hectares (5 acres) as per state land records.",
+        "Entry age strictly between 18 and 40 years.",
+        "Possession of Aadhaar Card and Savings/Jan Dhan Bank Account."
+      ],
+      "eligibility_hi": [
+        "छोटे एवं सीमांत किसान जिनके नाम राज्य के राजस्व रिकॉर्ड में 2 हेक्टेयर (लगभग 5 एकड़) तक कृषि योग्य भूमि है।",
+        "आयु सीमा: 18 वर्ष से 40 वर्ष के बीच होनी चाहिए।",
+        "आधार कार्ड और बचत/जनधन बैंक खाता होना अनिवार्य है।"
+      ],
+      "exclusions": [
+        "Farmers covered under any other statutory social security schemes like NPS, ESIC, EPFO.",
+        "Farmers who have opted for Pradhan Mantri Shram Yogi Maandhan Yojana or PM Laghu Vyapari Maandhan Yojana.",
+        "Institutional landholders and Income Tax payees.",
+        "Serving or retired government/PSU employees."
+      ],
+      "exclusions_hi": [
+        "अन्य सामाजिक सुरक्षा योजनाओं (NPS, ESIC, EPFO) के सदस्य।",
+        "प्रधानमंत्री श्रम योगी मानधन योजना के लाभार्थी।",
+        "आयकर दाता (Income Tax Payers) और सरकारी कर्मचारी।"
+      ],
+      "required_documents": [
+        "Aadhaar Card (आधार कार्ड)",
+        "Savings Bank Account Passbook / Cheque (बचत बैंक खाता पासबुक)",
+        "Land Record / Khasra-Khatauni showing land <= 2 hectares (खसरा-खतौनी)"
+      ],
+      "application_steps": [
+        "Step 1: Visit the nearest Common Service Centre (CSC) with your Aadhaar and Bank Passbook.",
+        "Step 2: Village Level Entrepreneur (VLE) enters Aadhaar, name, and date of birth in https://maandhan.in portal.",
+        "Step 3: Pay the first month contribution in cash at CSC; subsequent months are auto-debited from bank or PM-KISAN.",
+        "Step 4: Unique Pension Number (KMY Card) is printed and given immediately to the farmer."
+      ],
+      "application_steps_hi": [
+        "चरण 1: अपने आधार कार्ड और बैंक पासबुक के साथ निकटतम सीएससी (जन सेवा केंद्र) पर जाएं।",
+        "चरण 2: सीएससी संचालक https://maandhan.in पर आपकी जानकारी दर्ज करेगा।",
+        "चरण 3: पहले महीने का अंशदान नकद जमा करें; आगे का अंशदान बैंक या पीएम-किसान किस्त से कटेगा।",
+        "चरण 4: तुरंत आपका किसान पेंशन कार्ड (KMY Card) प्रिंट करके आपको दे दिया जाएगा।"
+      ],
+      "official_source": "https://maandhan.in/",
+      "application_url": "https://maandhan.in/",
+      "helpline": "1800-267-6888 (Toll Free / टोल फ्री हेल्पलाइन)",
+      "last_verified": "2024-10-15",
+      "category": "social_security_pension",
+      "keywords": [
+        "पेंशन", "बुढ़ापा", "मानधन", "3000", "रिटायरमेंट", "वृद्धावस्था", "मासिक सहायता",
+        "pension", "old age", "mandhan", "pm-kmy", "kisan pension", "social security"
+      ],
+      "critical_questions": [
+        "आपकी वर्तमान आयु कितनी है? (यह योजना 18 से 40 वर्ष की आयु के लिए है)",
+        "क्या आपकी कुल कृषि भूमि 2 हेक्टेयर (लगभग 5 एकड़) या उससे कम है?",
+        "क्या आप पहले से किसी सरकारी पेंशन या ईपीएफओ (EPFO) के सदस्य हैं?"
+      ]
+    },
+    {
+      "id": "pmay_g",
+      "name": "Pradhan Mantri Awaas Yojana - Gramin (PMAY-G)",
+      "name_hi": "प्रधानमंत्री आवास योजना - ग्रामीण (पीएमएवाई-जी)",
+      "ministry": "Ministry of Rural Development",
+      "ministry_hi": "ग्रामीण विकास मंत्रालय",
+      "purpose": "To provide financial assistance to all houseless rural householders and households living in kutcha and dilapidated houses for construction of pucca houses with basic amenities.",
+      "purpose_hi": "ग्रामीण क्षेत्रों में बेघर परिवारों तथा कच्चे और जर्जर मकानों में रहने वाले पात्र परिवारों को बुनियादी सुविधाओं से युक्त पक्का मकान बनाने के लिए आर्थिक सहायता देना।",
+      "benefits": [
+        "Grant of Rs. 1,20,000/- per unit in plain areas.",
+        "Grant of Rs. 1,30,000/- per unit in hilly states, difficult areas, and IAP/LWE districts.",
+        "Additional 90 to 95 person-days of unskilled labor support under MGNREGS (approx. Rs. 20,000 to Rs. 25,000 additional wage benefit).",
+        "Assistance of Rs. 12,000 for construction of household latrine through Swachh Bharat Mission - Gramin (SBM-G).",
+        "Convergence for electricity connection (Saubhagya) and LPG gas connection (Ujjwala)."
+      ],
+      "benefits_hi": [
+        "मैदानी क्षेत्रों में पक्का मकान बनाने हेतु ₹1,20,000 की सीधी आर्थिक सहायता।",
+        "पहाड़ी राज्यों और दुर्गम क्षेत्रों में ₹1,30,000 की अनुदान राशि।",
+        "मनरेगा (MGNREGS) के तहत 90-95 दिन की अकुशल मजदूरी (लगभग ₹20,000 - ₹25,000 अतिरिक्त सहायता)।",
+        "स्वच्छ भारत मिशन के तहत शौचालय निर्माण के लिए ₹12,000 की अलग से सहायता।",
+        "उज्ज्वला योजना से मुफ्त गैस कनेक्शन और सौभाग्य योजना से बिजली कनेक्शन की सुविधा।"
+      ],
+      "eligibility": [
+        "Rural households with no shelter or living in zero, one, or two-room houses with kutcha wall and kutcha roof.",
+        "Beneficiary selection is strictly based on Socio-Economic and Caste Census (SECC 2011) and Awaas+ list duly verified by the Gram Sabha.",
+        "Priority given to SC/ST, minorities, widows, disabled persons, and landless laborers."
+      ],
+      "eligibility_hi": [
+        "ग्रामीण क्षेत्रों के वे परिवार जिनके पास पक्का मकान नहीं है या जो कच्चे/जर्जर एक-दो कमरों के घर में रहते हैं।",
+        "लाभार्थी का नाम सामाजिक-आर्थिक जाति जनगणना (SECC 2011) या राज्य की 'आवास+' सूची में दर्ज होना चाहिए, जिसे ग्राम सभा ने सत्यापित किया हो।",
+        "अनुसूचित जाति/जनजाति, दिव्यांग, विधवा और भूमिहीन परिवारों को प्राथमिकता दी जाती है।"
+      ],
+      "exclusions": [
+        "Households owning motorized 2/3/4 wheeler or agricultural equipment (mechanized 3-4 wheeler agricultural equipment).",
+        "Households with any member as a government employee.",
+        "Households with non-agricultural enterprises registered with government.",
+        "Any member paying income tax or professional tax.",
+        "Households owning 2.5 acres or more of irrigated land with irrigation equipment."
+      ],
+      "exclusions_hi": [
+        "जिनके पास दोपहिया, तिपहिया या चार पहिया वाहन, ट्रैक्टर या मछली पकड़ने वाली मोटरबोट हो।",
+        "परिवार में कोई सदस्य सरकारी कर्मचारी हो।",
+        "परिवार का कोई सदस्य आयकर या व्यावसायिक कर चुकाता हो।",
+        "5 एकड़ या अधिक सिंचित भूमि का स्वामी हो।"
+      ],
+      "required_documents": [
+        "Aadhaar Card of all adult family members (आधार कार्ड)",
+        "Bank Account details / Passbook copy (बैंक पासबुक)",
+        "MGNREGA Job Card Number (मनरेगा जॉब कार्ड नंबर)",
+        "Consent for Aadhaar usage and photographs of existing kutcha house (कच्चे मकान की फोटो)"
+      ],
+      "application_steps": [
+        "Step 1: Check your name in the Gram Panchayat PMAY-G Permanent Wait List (PWL) / Awaas+ Survey list.",
+        "Step 2: If listed, submit Aadhaar, Bank Details, and MGNREGA Job Card to your Gram Panchayat Secretary or Block Development Officer (BDO).",
+        "Step 3: Geo-tagged physical inspection of your existing house is carried out via AwaasApp by local officials.",
+        "Step 4: Once sanctioned, financial assistance is transferred in 3-4 installments directly to bank account based on construction stages (foundation, lintel, roof completion).",
+        "Step 5: Track online progress on https://awaassoft.nic.in/ using your Registration Number."
+      ],
+      "application_steps_hi": [
+        "चरण 1: अपनी ग्राम पंचायत में जाकर 'आवास प्लस' या आवास प्रतीक्षा सूची में अपना नाम जांचें।",
+        "चरण 2: नाम होने पर ग्राम पंचायत सचिव / ग्राम रोजगार सहायक को आधार कार्ड, बैंक पासबुक और जॉब कार्ड दें।",
+        "चरण 3: आवास ऐप (AwaasApp) द्वारा आपके वर्तमान कच्चे घर का जियो-टैगिंग फोटो लिया जाएगा।",
+        "चरण 4: स्वीकृति मिलने पर निर्माण कार्य के विभिन्न चरणों (नींव, दीवार, छत) के अनुसार राशि सीधे 3-4 किस्तों में बैंक खाते में भेजी जाएगी।",
+        "चरण 5: https://awaassoft.nic.in पर पंजीकरण नंबर से प्रगति ट्रैक की जा सकती है।"
+      ],
+      "official_source": "https://pmayg.nic.in/",
+      "application_url": "https://awaassoft.nic.in/",
+      "helpline": "1800-11-6446 (Toll Free National Helpline / राष्ट्रीय टोल-फ्री हेल्पलाइन)",
+      "last_verified": "2024-10-10",
+      "category": "rural_housing",
+      "keywords": [
+        "मकान", "घर", "आवास", "कच्चा मकान", "छत", "पक्का घर", "पीएम आवास", "रहने की जगह",
+        "house", "pmay", "pmay-g", "housing scheme", "pucca house", "rural shelter", "awas"
+      ],
+      "critical_questions": [
+        "क्या आपका वर्तमान मकान पूरी तरह कच्चा या जर्जर है, अथवा आपके पास पक्का मकान नहीं है?",
+        "क्या आपका या आपके परिवार का नाम ग्राम पंचायत की 'आवास+' सूची में दर्ज है?",
+        "क्या परिवार में किसी के नाम चार पहिया वाहन या सरकारी नौकरी है?"
+      ]
+    },
+    {
+      "id": "pmjay",
+      "name": "Ayushman Bharat - Pradhan Mantri Jan Arogya Yojana (PM-JAY)",
+      "name_hi": "आयुष्मान भारत - प्रधानमंत्री जन आरोग्य योजना (पीएम-जेएवाई)",
+      "ministry": "Ministry of Health and Family Welfare / National Health Authority",
+      "ministry_hi": "स्वास्थ्य एवं परिवार कल्याण मंत्रालय / राष्ट्रीय स्वास्थ्य प्राधिकरण",
+      "purpose": "World's largest government-funded healthcare assurance scheme offering secondary and tertiary care hospitalization cover to low-income families and senior citizens.",
+      "purpose_hi": "गरीब और कमज़ोर परिवारों तथा 70 वर्ष से अधिक आयु के वरिष्ठ नागरिकों को गंभीर बीमारी के इलाज और अस्पताल में भर्ती के भारी खर्च से सुरक्षा प्रदान करना।",
+      "benefits": [
+        "Health cover of Rs. 5,00,000 per family per year on a family floater basis.",
+        "Cashless and paperless access to healthcare services at all empaneled public and private hospitals across India.",
+        "Covers up to 3 days of pre-hospitalization and 15 days of post-hospitalization expenses, diagnostics, medicines, and ICU charges.",
+        "All pre-existing medical conditions are covered from day one.",
+        "No restriction on family size, age, or gender.",
+        "Special expansion: All senior citizens aged 70 years and above are now eligible for Rs. 5 Lakh distinct top-up cover irrespective of family income."
+      ],
+      "benefits_hi": [
+        "प्रति वर्ष प्रत्येक पात्र परिवार को ₹5,00,000 तक का मुफ्त स्वास्थ्य सुरक्षा कवर।",
+        "देशभर के सभी सूचीबद्ध सरकारी और निजी अस्पतालों में पूरी तरह कैशलेस और पेपरलेस इलाज।",
+        "अस्पताल में भर्ती होने से 3 दिन पहले और छुट्टी के 15 दिन बाद तक की जांच, दवाएं और उपचार शामिल।",
+        "पहले से मौजूद बीमारियां भी पहले दिन से कवर होती हैं।",
+        "परिवार के सदस्यों की संख्या या उम्र की कोई सीमा नहीं।",
+        "विशेष विस्तार: 70 वर्ष या उससे अधिक आयु के सभी वरिष्ठ नागरिकों को आय की सीमा के बिना ₹5 लाख का अलग आयुष्मान कवर।"
+      ],
+      "eligibility": [
+        "Rural households meeting deprivation criteria defined in SECC 2011 (e.g. households with only one room with kutchha walls/roof, female-headed households, SC/ST, manual scavengers, landless casual manual laborers).",
+        "All senior citizens aged 70 years and above (irrespective of socio-economic status) under the new Ayushman Vay Vandana expansion.",
+        "Active NFSA Ration Card holders in participating states."
+      ],
+      "eligibility_hi": [
+        "सामाजिक-आर्थिक जाति जनगणना (SECC 2011) की वंचित श्रेणी में आने वाले ग्रामीण परिवार (कच्ची छत वाले, महिला मुखिया, भूमिहीन दिहाड़ी मजदूर परिवार)।",
+        "नवीनतम विस्तार: 70 वर्ष और उससे अधिक आयु के सभी वरिष्ठ नागरिक (चाहे आय कोई भी हो)।",
+        "अधिकांश राज्यों में राष्ट्रीय खाद्य सुरक्षा राशन कार्ड (NFSA) धारक परिवार।"
+      ],
+      "exclusions": [
+        "Families having motorized two/three/four wheelers, mechanized farming equipment.",
+        "Government employees and institutional taxpayers.",
+        "Households with government-registered non-agricultural enterprises."
+      ],
+      "exclusions_hi": [
+        "आयकर दाता या सरकारी कर्मचारी परिवार (70+ वरिष्ठ नागरिक विस्तार को छोड़कर)।",
+        "संपन्न परिवार जिनके पास बड़े कृषि उपकरण और चार पहिया वाहन हैं।"
+      ],
+      "required_documents": [
+        "Aadhaar Card (आधार कार्ड - अनिवार्य)",
+        "Ration Card / Family ID / Samagra ID (राशन कार्ड / परिवार पहचान पत्र)",
+        "Active Mobile Number for OTP (ओटीपी हेतु मोबाइल नंबर)"
+      ],
+      "application_steps": [
+        "Step 1: Check your eligibility on https://beneficiary.nha.gov.in or call 14555.",
+        "Step 2: Enter your mobile number, verify OTP, and search by Aadhaar Number, Ration Card, or Family ID.",
+        "Step 3: If eligible, initiate e-KYC using Aadhaar OTP, Fingerprint, or Face Auth on the Ayushman App.",
+        "Step 4: Once approved, download the PVC Ayushman Card instantly on your phone or get it printed at any CSC / Empaneled Hospital Ayushman Mitra desk.",
+        "Step 5: Show the card at hospital reception to avail cashless treatment."
+      ],
+      "application_steps_hi": [
+        "चरण 1: आधिकारिक पोर्टल https://beneficiary.nha.gov.in पर जाएं या टोल-फ्री 14555 पर पात्रता जांचें।",
+        "चरण 2: अपना मोबाइल नंबर दर्ज करके ओटीपी सत्यापन करें और राशन कार्ड या आधार नंबर से नाम खोजें।",
+        "चरण 3: नाम मिलने पर आधार ओटीपी या चेहरा स्कैन (Face Auth) से e-KYC पूरा करें।",
+        "चरण 4: सत्यापन के बाद अपना डिजिटल आयुष्मान कार्ड (Ayushman Card) डाउनलोड करें या सीएससी / अस्पताल में 'आयुष्मान मित्र' से प्राप्त करें।",
+        "चरण 5: किसी भी सूचीबद्ध अस्पताल में भर्ती के समय यह कार्ड दिखाकर पूरी तरह मुफ्त इलाज पाएं।"
+      ],
+      "official_source": "https://nha.gov.in/PM-JAY",
+      "application_url": "https://beneficiary.nha.gov.in/",
+      "helpline": "14555 (Toll Free National Call Center / राष्ट्रीय कॉल सेंटर)",
+      "last_verified": "2024-10-15",
+      "category": "healthcare_insurance",
+      "keywords": [
+        "इलाज", "अस्पताल", "बीमारी", "स्वास्थ्य", "आयुष्मान", "दवा", "ऑपरेशन", "5 लाख", "स्वास्थ्य कार्ड",
+        "health", "hospital", "ayushman bharat", "pmjay", "medical treatment", "free treatment", "doctor"
+      ],
+      "critical_questions": [
+        "क्या आपके पास राशन कार्ड या परिवार पहचान पत्र है?",
+        "क्या परिवार में किसी मरीज़ को अस्पताल में भर्ती होने की आवश्यकता है या कोई 70+ वरिष्ठ नागरिक हैं?",
+        "क्या आपने कभी 14555 पर या beneficiary.nha.gov.in पर आयुष्मान सूची में नाम चेक किया है?"
+      ]
+    },
+    {
+      "id": "mgnrega",
+      "name": "Mahatma Gandhi National Rural Employment Guarantee Act (MGNREGA)",
+      "name_hi": "महात्मा गांधी राष्ट्रीय ग्रामीण रोजगार गारंटी अधिनियम (मनरेगा)",
+      "ministry": "Ministry of Rural Development",
+      "ministry_hi": "ग्रामीण विकास मंत्रालय",
+      "purpose": "To enhance livelihood security in rural areas by providing at least 100 days of guaranteed wage employment in a financial year to every rural household whose adult members volunteer to do unskilled manual work.",
+      "purpose_hi": "ग्रामीण क्षेत्रों में आजीविका सुरक्षा बढ़ाने के लिए प्रत्येक ग्रामीण परिवार को वित्तीय वर्ष में कम से कम 100 दिनों के अकुशल श्रम कार्य की कानूनी गारंटी देना।",
+      "benefits": [
+        "100 days of guaranteed wage employment per rural household per financial year.",
+        "Right to unemployment allowance if work is not provided within 15 days of applying.",
+        "Wages paid directly into the worker's bank or post office account via Aadhaar-based Payment System (ABPS).",
+        "Equal wages for men and women without gender discrimination.",
+        "Creche facilities, drinking water, first aid, and shade provided at worksite."
+      ],
+      "benefits_hi": [
+        "प्रति ग्रामीण परिवार को वित्तीय वर्ष में न्यूनतम 100 दिन का कानूनी गारंटीशुदा काम।",
+        "काम मांगने के 15 दिनों के भीतर काम न मिलने पर सरकार द्वारा बेरोजगारी भत्ता पाने का अधिकार।",
+        "मजदूरी का भुगतान बिना किसी देरी के सीधे आधार आधारित प्रणाली (ABPS) से बैंक/डाकघर खाते में।",
+        "महिला और पुरुष दोनों को समान काम के लिए बिल्कुल समान पारिश्रमिक।",
+        "कार्यस्थल पर पेयजल, प्राथमिक उपचार और बच्चों की देखभाल (पालना घर) की अनिवार्य सुविधा।"
+      ],
+      "eligibility": [
+        "Adult members of any rural household residing in the Gram Panchayat.",
+        "Willingness to do unskilled manual work.",
+        "Applicant must possess or apply for a MGNREGA Job Card issued by the local Gram Panchayat."
+      ],
+      "eligibility_hi": [
+        "ग्राम पंचायत क्षेत्र में रहने वाले किसी भी परिवार के वयस्क सदस्य (18 वर्ष से ऊपर)।",
+        "अकुशल शारीरिक श्रम (Manual Work) करने के इच्छुक हों।",
+        "ग्राम पंचायत द्वारा जारी जॉब कार्ड (Job Card) होना या उसके लिए आवेदन करना आवश्यक है।"
+      ],
+      "exclusions": [
+        "Urban residents (urban areas not covered under rural MGNREGA).",
+        "Persons unwilling or unable to perform manual/physical labor.",
+        "Minor individuals below 18 years of age."
+      ],
+      "exclusions_hi": [
+        "शहरी क्षेत्रों के निवासी।",
+        "18 वर्ष से कम आयु के नाबालिग।",
+        "जो शारीरिक/अकुशल श्रम करने के इच्छुक न हों।"
+      ],
+      "required_documents": [
+        "Aadhaar Card (आधार कार्ड)",
+        "Bank or Post Office Passbook linked with Aadhaar (बैंक/डाकघर पासबुक)",
+        "Passport size photographs (पासपोर्ट फोटो)",
+        "Proof of residence in Gram Panchayat (निवास प्रमाण)"
+      ],
+      "application_steps": [
+        "Step 1: Submit an application for Job Card (Form 1) to the Gram Panchayat or Program Officer.",
+        "Step 2: Gram Panchayat verifies local residence within 15 days and issues a free Job Card with family details.",
+        "Step 3: Submit a dated written application for work or request work verbally to the Panchayat Secretary / Rozgar Sahayak.",
+        "Step 4: Dated receipt of application for work MUST be collected by the worker.",
+        "Step 5: Work must be provided within 5 km of residence within 15 days, or unemployment allowance is payable."
+      ],
+      "application_steps_hi": [
+        "चरण 1: अपनी ग्राम पंचायत में ग्राम रोजगार सहायक या प्रधान/सचिव को जॉब कार्ड के लिए सादे कागज या फॉर्म पर आवेदन दें।",
+        "चरण 2: ग्राम पंचायत सत्यापन के 15 दिनों के भीतर परिवार के सभी वयस्क सदस्यों का मुफ्त जॉब कार्ड जारी करेगी।",
+        "चरण 3: काम पाने के लिए पंचायत सचिव को लिखित या मौखिक मांग पत्र दें और उसकी रसीद लें।",
+        "चरण 4: मांग के 15 दिनों के भीतर 5 किलोमीटर के दायरे में काम मिलना अनिवार्य है।",
+        "चरण 5: काम पूरा होने पर मजदूरी सीधे आपके बैंक खाते में भेजी जाएगी।"
+      ],
+      "official_source": "https://nrega.nic.in/",
+      "application_url": "https://nrega.nic.in/",
+      "helpline": "1800-345-6565 (State/National Rural Development Helpline / ग्रामीण विकास हेल्पलाइन)",
+      "last_verified": "2024-10-10",
+      "category": "rural_employment",
+      "keywords": [
+        "मजदूरी", "काम", "रोजगार", "मनरेगा", "जॉब कार्ड", "100 दिन", "दिहाड़ी", "ग्रामीण काम",
+        "mgnrega", "nrega", "job card", "rural employment", "unskilled labor", "rozgar", "majdoori"
+      ],
+      "critical_questions": [
+        "क्या आपके पास अपनी ग्राम पंचायत का बना हुआ मनरेगा जॉब कार्ड है?",
+        "क्या परिवार का कोई वयस्क सदस्य शारीरिक/अकुशल श्रम करने का इच्छुक है?",
+        "क्या आपका बैंक खाता आधार से लिंक है ताकि मजदूरी सीधे खाते में आ सके?"
+      ]
+    }
+  ],
+  "myscheme_portal": {
+    "name": "myScheme Portal (Government of India)",
+    "name_hi": "माईस्कीम पोर्टल (भारत सरकार)",
+    "description": "National platform that provides citizens with a single window to discover government schemes they are eligible for across 750+ Central and State welfare programs.",
+    "description_hi": "भारत सरकार का एक राष्ट्रीय मंच जहाँ कोई भी नागरिक अपनी आयु, राज्य, जाति, व्यवसाय और आय के आधार पर 750 से अधिक सरकारी योजनाओं की खोज कर सकता है।",
+    "official_url": "https://www.myscheme.gov.in/",
+    "search_guide_hi": "यदि आपकी समस्या उपरोक्त विशिष्ट योजनाओं में नहीं आती, तो आप 'myScheme' पर जाकर 'योजना खोजें' (Find Schemes) विकल्प से अपने लिए उपयुक्त सरकारी मदद खोज सकते हैं।",
+    "helpline": "1800-111-555"
+  }
+}

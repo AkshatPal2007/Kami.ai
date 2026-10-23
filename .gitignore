@@ -1,0 +1,25 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Environment and secrets (CRITICAL: Never commit real keys)
+.env
+.env.local
+*.key
+*.pem
+
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+
+# Streamlit logs
+.streamlit/
+*.log
+
+# OS-generated files
+.DS_Store
+Thumbs.db

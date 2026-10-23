@@ -10,6 +10,11 @@ actionable checklists, verified scheme data, and telephony architecture.
 import os
 import sys
 import json
+from dotenv import load_dotenv
+
+# Automatically load environment variables from .env file
+load_dotenv()
+
 import streamlit as st
 import streamlit.components.v1 as components
 

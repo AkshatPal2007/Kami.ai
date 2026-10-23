@@ -9,6 +9,10 @@ import json
 import re
 from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, field
+from dotenv import load_dotenv
+
+# Load environment variables from .env if present
+load_dotenv()
 
 from services.scheme_service import SchemeService
 

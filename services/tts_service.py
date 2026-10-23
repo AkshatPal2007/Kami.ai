@@ -1,5 +1,5 @@
 """
-TTS Service: Provides Hindi text-to-speech audio generation using gTTS as a reliable backend,
+TTS Service: Provides Hindi and English text-to-speech audio generation using gTTS,
 and generates client-side Web Speech API JavaScript for instant browser playback.
 """
 
@@ -35,19 +35,21 @@ class TTSService:
         return cleaned
 
     @staticmethod
-    def generate_hindi_audio(text: str) -> Optional[bytes]:
+    def generate_audio(text: str, lang: str = "hi") -> Optional[bytes]:
         """
-        Generates MP3 audio bytes using gTTS (Hindi lang 'hi').
-        Returns bytes or None on error.
+        Generates MP3 audio bytes using gTTS (supports 'hi' or 'en').
         """
         speech_text = TTSService.clean_text_for_speech(text)
         if not speech_text:
             return None
 
+        # Normalize lang code
+        tts_lang = "en" if lang.startswith("en") else "hi"
+
         try:
             from gtts import gTTS
             fp = io.BytesIO()
-            tts = gTTS(text=speech_text, lang="hi", slow=False)
+            tts = gTTS(text=speech_text, lang=tts_lang, slow=False)
             tts.write_to_fp(fp)
             fp.seek(0)
             return fp.read()
@@ -56,23 +58,26 @@ class TTSService:
             return None
 
     @staticmethod
-    def get_browser_speech_js(text: str) -> str:
+    def generate_hindi_audio(text: str) -> Optional[bytes]:
+        """Backward compatibility wrapper."""
+        return TTSService.generate_audio(text, lang="hi")
+
+    @staticmethod
+    def get_browser_speech_js(text: str, lang: str = "hi") -> str:
         """
         Returns safe JavaScript snippet for Web Speech API SpeechSynthesis.
         """
         cleaned = TTSService.clean_text_for_speech(text)
-        # Escape for JS string literal
         escaped = cleaned.replace("\\", "\\\\").replace("'", "\\'").replace("\n", " ")
+        speech_lang = "en-IN" if lang.startswith("en") else "hi-IN"
         return f"""
         <script>
             if ('speechSynthesis' in window) {{
                 window.speechSynthesis.cancel();
                 const utterance = new SpeechSynthesisUtterance('{escaped}');
-                utterance.lang = 'hi-IN';
+                utterance.lang = '{speech_lang}';
                 utterance.rate = 0.95;
                 window.speechSynthesis.speak(utterance);
-            }} else {{
-                alert('आपके ब्राउज़र में आवाज़ (Speech Synthesis) समर्थित नहीं है।');
             }}
         </script>
         """

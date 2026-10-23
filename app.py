@@ -1,20 +1,18 @@
 """
-Scheme Saathi (स्कीम साथी) — AI-Powered Government Scheme Assistant for Rural India
-"आपकी समस्या, सरकारी मदद का सही रास्ता।"
+Scheme Saathi (स्कीम साथी) — AI Government Benefits Assistant for Rural India
+"आपकी समस्या, सरकारी मदद का सही रास्ता।" | "Your Problem, The Right Path to Government Support."
 
-A conversational Hindi-first assistant designed for rural citizens with low digital literacy.
-Supports browser Hindi speech recognition, text-to-speech audio, official scheme matching,
-eligibility assessment, actionable checklists, and future telephony architecture.
+Bilingual (English & Hindi) conversational assistant for rural and low-literacy citizens.
+Decluttered, high-accessibility UI with voice input, audio speech synthesis,
+actionable checklists, verified scheme data, and telephony architecture.
 """
 
 import os
 import sys
 import json
-import base64
 import streamlit as st
 import streamlit.components.v1 as components
 
-# Ensure local imports work reliably
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from services.scheme_service import SchemeService
@@ -23,813 +21,633 @@ from services.tts_service import TTSService
 from services.telephony_service import TelephonyService
 
 
-# --- STREAMLIT PAGE CONFIGURATION ---
+# --- STREAMLIT CONFIGURATION ---
 st.set_page_config(
-    page_title="Scheme Saathi | स्कीम साथी — सरकारी योजना सहायक",
+    page_title="Scheme Saathi | AI Government Scheme Assistant",
     page_icon="🌾",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
-# --- CUSTOM CSS FOR RURAL-FRIENDLY ACCESSIBLE DESIGN ---
-CUSTOM_CSS = """
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Mukta:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap');
-
-html, body, [class*="css"] {
-    font-family: 'Mukta', 'Poppins', sans-serif !important;
+# --- BILINGUAL UI DICTIONARY ---
+UI = {
+    "en": {
+        "title": "Scheme Saathi",
+        "tagline": "AI Government Benefits Assistant for Rural India",
+        "desc": "Explain your situation in plain English or Hindi. We match you with verified government welfare schemes.",
+        "assistant_tab": "💬 Assistant",
+        "schemes_tab": "📋 Schemes Directory",
+        "checklist_tab": "✅ Document Checklist",
+        "phone_tab": "📞 Phone Call (IVR)",
+        "quick_label": "💡 Try a sample question (Click to run):",
+        "chip_a": "🌧️ Crop Damage (Rain)",
+        "chip_b": "🚜 Farmer Support",
+        "chip_c": "🏥 Medical / Hospital",
+        "chip_d": "🏠 Rural Housing",
+        "chip_e": "🏪 Other / Out of Scope",
+        "text_a": "My crop was damaged by heavy rainfall. I need government assistance.",
+        "text_b": "I am a farmer. I need government assistance for farming.",
+        "text_c": "Need financial assistance for family medical treatment in hospital.",
+        "text_d": "Looking for government assistance to build a pucca house in village.",
+        "text_e": "My shop was burglarized, I need compensation.",
+        "input_label": "Describe your problem or requirement:",
+        "input_placeholder": "e.g., My paddy crop is ruined due to heavy rains, what government help can I get?",
+        "ask_btn": "🔍 Get Advice & Schemes",
+        "clear_btn": "Clear",
+        "listen_btn": "🔊 Listen Audio",
+        "recommendations_title": "🎯 Recommended Government Schemes",
+        "next_steps_title": "📋 Actionable Next Steps",
+        "follow_up_title": "❓ One Quick Question to Confirm Details:",
+        "official_source": "Official Portal",
+        "helpline": "Helpline",
+        "verified_badge": "Verified Gov Portal",
+        "disclaimer_text": "⚠️ Important: Scheme Saathi provides advisory guidance only. Final eligibility and benefit disbursement depend strictly on verification by the competent government department.",
+        "mode_demo": "⚡ Mode: Smart Demo (Offline / Rule-Based)",
+        "mode_gemini": "🤖 Mode: Gemini AI",
+        "reset_btn": "🔄 Clear & Reset Conversation",
+        "myscheme_card_title": "🌐 Explore 750+ Welfare Schemes on myScheme",
+        "myscheme_card_text": "Your query is not covered in our agricultural database. Use the Government of India's single-window portal:",
+        "myscheme_btn": "Open myScheme.gov.in",
+        "checklist_title": "📑 Essential Documents Checklist",
+        "checklist_desc": "Tick the documents you already possess to evaluate your application readiness:",
+        "checklist_score": "Application Readiness Score:",
+        "telephony_title": "📞 Future Vision: Toll-Free Telephone Helpline (IVR)",
+        "telephony_desc": "Long-term vision: A simple 1800 toll-free number where rural citizens can speak via standard feature phones without internet.",
+        "sim_title": "🎧 Interactive Call Simulator",
+        "sim_btn": "▶️ Simulate Incoming Phone Call"
+    },
+    "hi": {
+        "title": "स्कीम साथी (Scheme Saathi)",
+        "tagline": "आपकी समस्या, सरकारी मदद का सही रास्ता।",
+        "desc": "अपनी समस्या सरल हिंदी या अंग्रेजी में बताएं। हम आपको सही व सत्यापित सरकारी योजनाओं से जोड़ते हैं।",
+        "assistant_tab": "💬 योजना सहायक",
+        "schemes_tab": "📋 सभी योजनाएं",
+        "checklist_tab": "✅ दस्तावेज़ चेकलिस्ट",
+        "phone_tab": "📞 फोन कॉल सेवा (IVR)",
+        "quick_label": "💡 तुरंत पूछने के लिए कोई एक उदाहरण चुनें:",
+        "chip_a": "🌧️ फसल नुकसान (बारिश)",
+        "chip_b": "🚜 किसान सहायता",
+        "chip_c": "🏥 अस्पताल इलाज",
+        "chip_d": "🏠 ग्रामीण आवास",
+        "chip_e": "🏪 अन्य समस्या (दुकान)",
+        "text_a": "मेरी फसल बारिश से खराब हो गई है। मुझे सरकारी मदद चाहिए।",
+        "text_b": "मैं किसान हूँ। मुझे खेती के लिए सरकारी सहायता चाहिए।",
+        "text_c": "परिवार में बीमारी के इलाज और अस्पताल के खर्च के लिए सरकारी मदद चाहिए।",
+        "text_d": "गाँव में पक्का मकान बनाने के लिए सरकारी सहायता चाहिए।",
+        "text_e": "मेरी दुकान में चोरी हो गई है, मुझे मुआवजा चाहिए।",
+        "input_label": "अपनी समस्या यहाँ सरल शब्दों में लिखें:",
+        "input_placeholder": "उदाहरण: मेरी धान की फसल बारिश से खराब हो गई है, मुझे क्या सरकारी मदद मिलेगी?",
+        "ask_btn": "🔍 योजना खोजें एवं सलाह लें",
+        "clear_btn": "साफ करें",
+        "listen_btn": "🔊 सुनें (ऑडियो)",
+        "recommendations_title": "🎯 संबंधित सरकारी योजनाएं",
+        "next_steps_title": "📋 आगे क्या करें — आसान चेकलिस्ट",
+        "follow_up_title": "❓ एक ज़रूरी सवाल:",
+        "official_source": "आधिकारिक पोर्टल",
+        "helpline": "हेल्पलाइन",
+        "verified_badge": "सत्यापित सरकारी पोर्टल",
+        "disclaimer_text": "⚠️ महत्वपूर्ण सूचना: स्कीम साथी एक मार्गदर्शन सहायक है। अंतिम पात्रता और लाभ की स्वीकृति संबंधित सरकारी विभाग या बैंक के नियमों के अधीन है।",
+        "mode_demo": "⚡ मोड: स्मार्ट डेमो (नियम आधारित)",
+        "mode_gemini": "🤖 मोड: Gemini AI",
+        "reset_btn": "🔄 नई बातचीत",
+        "myscheme_card_title": "🌐 myScheme पोर्टल पर 750+ योजनाएं खोजें",
+        "myscheme_card_text": "आपकी समस्या वर्तमान कृषि डेटाबेस में नहीं है। भारत सरकार के राष्ट्रीय पोर्टल पर खोजें:",
+        "myscheme_btn": "myScheme.gov.in खोलें",
+        "checklist_title": "📑 ज़रूरी दस्तावेज़ चेकलिस्ट",
+        "checklist_desc": "आवेदन की तैयारी जांचने के लिए अपने तैयार दस्तावेज़ों पर टिक लगाएं:",
+        "checklist_score": "दस्तावेज़ तैयारी स्कोर:",
+        "telephony_title": "📞 भविष्य का विजन: टोल-फ्री फोन कॉल हेल्पलाइन (IVR)",
+        "telephony_desc": "दीर्घकालिक लक्ष्य: एक टोल-फ्री नंबर जिस पर ग्रामीण नागरिक बिना इंटरनेट वाले सामान्य फोन से कॉल कर सकें।",
+        "sim_title": "🎧 फोन कॉल बातचीत सिमुलेटर",
+        "sim_btn": "▶️ कॉल वार्तालाप चलाएं"
+    }
 }
-
-/* Color Variables */
-:root {
-    --primary-green: #1B5E20;
-    --accent-orange: #E65100;
-    --saffron: #FF9800;
-    --light-bg: #FBF9F5;
-    --card-border: #E0E0E0;
-    --text-dark: #212121;
-}
-
-/* Header Banner */
-.main-header {
-    background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 60%, #E65100 100%);
-    color: white;
-    padding: 1.8rem 2rem;
-    border-radius: 16px;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-}
-.main-header h1 {
-    font-size: 2.4rem;
-    font-weight: 800;
-    margin-bottom: 0.3rem;
-    color: #FFFFFF !important;
-}
-.main-header p {
-    font-size: 1.25rem;
-    opacity: 0.95;
-    margin-bottom: 0.5rem;
-    color: #FFF3E0 !important;
-}
-.header-badge {
-    display: inline-block;
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    margin-right: 0.5rem;
-}
-
-/* Mode Badges */
-.badge-demo {
-    background-color: #FFF3E0;
-    color: #E65100;
-    border: 1px solid #FFE0B2;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    display: inline-block;
-}
-.badge-gemini {
-    background-color: #E8F5E9;
-    color: #1B5E20;
-    border: 1px solid #C8E6C9;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    display: inline-block;
-}
-
-/* Rural Accessible Cards */
-.saathi-card {
-    background: #FFFFFF;
-    border: 1px solid #E0E0E0;
-    border-left: 6px solid #2E7D32;
-    border-radius: 12px;
-    padding: 1.4rem;
-    margin-bottom: 1.2rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-}
-.saathi-card-alert {
-    background: #FFF8E1;
-    border: 1px solid #FFE082;
-    border-left: 6px solid #FF8F00;
-    border-radius: 12px;
-    padding: 1.2rem;
-    margin-bottom: 1.2rem;
-}
-
-/* Large Accessible Buttons */
-.stButton > button {
-    font-family: 'Mukta', sans-serif !important;
-    font-size: 1.15rem !important;
-    font-weight: 600 !important;
-    border-radius: 10px !important;
-    padding: 0.6rem 1.4rem !important;
-    min-height: 48px !important;
-    transition: all 0.2s ease-in-out !important;
-}
-
-/* Scheme Title Box */
-.scheme-header {
-    background: #F1F8E9;
-    border-radius: 8px;
-    padding: 0.8rem 1.2rem;
-    margin-bottom: 1rem;
-    border-left: 4px solid #33691E;
-}
-
-/* Checklist Items */
-.checklist-item {
-    background: #FAFAFA;
-    border: 1px solid #EEEEEE;
-    border-radius: 8px;
-    padding: 0.7rem 1rem;
-    margin-bottom: 0.5rem;
-    font-size: 1.05rem;
-}
-
-/* Disclaimer Footer */
-.disclaimer-box {
-    background: #ECEFF1;
-    border-left: 4px solid #607D8B;
-    padding: 0.8rem 1.2rem;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    color: #455A64;
-    margin-top: 1.5rem;
-}
-</style>
-"""
-st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
-
 
 # --- SESSION STATE INITIALIZATION ---
+if "lang" not in st.session_state:
+    st.session_state.lang = "en"  # Default English with instant Hindi toggle
 if "conversation" not in st.session_state:
-    st.session_state.conversation = []  # list of dicts: {"role": "user"|"assistant", "content": ..., "response_obj": ...}
+    st.session_state.conversation = []
 if "gathered_facts" not in st.session_state:
     st.session_state.gathered_facts = {}
-if "last_query" not in st.session_state:
-    st.session_state.last_query = ""
-if "voice_input_text" not in st.session_state:
-    st.session_state.voice_input_text = ""
-if "checked_documents" not in st.session_state:
-    st.session_state.checked_documents = {}
+if "user_input_val" not in st.session_state:
+    st.session_state.user_input_val = ""
 if "custom_api_key" not in st.session_state:
     st.session_state.custom_api_key = os.getenv("GEMINI_API_KEY", "")
 
+L = UI[st.session_state.lang]
 
-# --- INITIALIZE SERVICES ---
+# --- SERVICES SETUP ---
 @st.cache_resource
 def get_scheme_service():
     return SchemeService()
 
 scheme_svc = get_scheme_service()
-
-# AIService handles dynamic API key updates
-api_key_to_use = st.session_state.custom_api_key or os.getenv("GEMINI_API_KEY", "")
 ai_svc = AIService(scheme_service=scheme_svc)
-if api_key_to_use:
-    ai_svc.api_key = api_key_to_use
+
+api_key = st.session_state.custom_api_key or os.getenv("GEMINI_API_KEY", "")
+if api_key:
+    ai_svc.api_key = api_key
     try:
         from google import genai
-        ai_svc.client = genai.Client(api_key=api_key_to_use)
+        ai_svc.client = genai.Client(api_key=api_key)
     except Exception:
         pass
 
 
-# --- SIDEBAR: CONTROLS, HELPLINES, AND SETTINGS ---
-with st.sidebar:
-    st.image("https://img.icons8.com/color/96/wheat.png", width=70)
-    st.title("स्कीम साथी (Scheme Saathi)")
-    st.caption("ग्रामीण भारत के लिए AI सरकारी योजना सहायक")
+# --- MODERN MINIMALIST STYLING ---
+CLEAN_CSS = """
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Mukta:wght@400;500;600;700&display=swap');
 
-    # Mode Status Badge
+html, body, [class*="css"] {
+    font-family: 'Inter', 'Mukta', sans-serif !important;
+}
+
+/* Header Navbar */
+.nav-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 1.4rem;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.brand-title {
+    font-size: 1.55rem;
+    font-weight: 800;
+    color: #15803D;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.brand-tagline {
+    font-size: 0.9rem;
+    color: #64748B;
+    margin: 0;
+}
+
+/* Mode Pills */
+.pill-demo {
+    background: #FEF3C7;
+    color: #B45309;
+    border: 1px solid #FDE68A;
+    padding: 4px 10px;
+    border-radius: 16px;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+.pill-gemini {
+    background: #DCFCE7;
+    color: #15803D;
+    border: 1px solid #BBF7D0;
+    padding: 4px 10px;
+    border-radius: 16px;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+/* Clean Cards */
+.card-clean {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+.card-alert {
+    background: #FFFBEB;
+    border: 1px solid #FDE68A;
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1rem;
+}
+
+/* Checklist step items */
+.step-item {
+    background: #F8FAFC;
+    border-left: 3px solid #16A34A;
+    padding: 0.6rem 0.9rem;
+    margin-bottom: 0.4rem;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.96rem;
+}
+
+/* Buttons */
+.stButton > button {
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    transition: all 0.15s ease-in-out !important;
+}
+
+/* Footer disclaimer */
+.disclaimer-clean {
+    font-size: 0.85rem;
+    color: #64748B;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+</style>
+"""
+st.markdown(CLEAN_CSS, unsafe_allow_html=True)
+
+
+# --- TOP BAR: BRAND + LANGUAGE TOGGLE + MODE BADGE ---
+top_col1, top_col2, top_col3 = st.columns([5, 3, 2])
+
+with top_col1:
+    st.markdown(f"""
+    <div>
+        <h2 class="brand-title">🌾 {L['title']}</h2>
+        <p class="brand-tagline">{L['tagline']}</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+with top_col2:
     is_gemini = ai_svc.is_ai_available()
-    if is_gemini:
-        st.markdown(f'<div class="badge-gemini">🤖 सक्रिय: Gemini AI ({ai_svc.model_name})</div>', unsafe_allow_html=True)
-    else:
-        st.markdown('<div class="badge-demo">⚡ सक्रिय: स्मार्ट डेमो मोड (नियम आधारित)</div>', unsafe_allow_html=True)
-        st.caption("ℹ️ बिना API Key के सभी मुख्य परिदृश्य (Scenarios A, B, C) 100% कार्यशील हैं।")
+    badge_html = f'<span class="pill-gemini">{L["mode_gemini"]}</span>' if is_gemini else f'<span class="pill-demo">{L["mode_demo"]}</span>'
+    st.markdown(f"<div style='text-align: right; margin-top: 8px;'>{badge_html}</div>", unsafe_allow_html=True)
 
-    st.markdown("---")
-
-    # Settings Accordion
-    with st.expander("⚙️ AI एवं API सेटिंग्स (Settings)", expanded=False):
-        user_key = st.text_input(
-            "Gemini API Key (वैकल्पिक)",
-            value=st.session_state.custom_api_key,
-            type="password",
-            help="यदि आपके पास Google Gemini API key है, तो यहाँ दर्ज करें। अन्यथा ऐप डेमो मोड में चलता रहेगा।"
-        )
-        if user_key != st.session_state.custom_api_key:
-            st.session_state.custom_api_key = user_key
-            st.rerun()
-
-        model_choice = st.selectbox(
-            "AI मॉडल चुनें",
-            ["gemini-2.5-flash", "gemini-1.5-flash"],
-            index=0
-        )
-        ai_svc.model_name = model_choice
-
-    # Official Helpline Directory
-    st.markdown("### 📞 प्रमुख सरकारी हेल्पलाइन")
-    st.markdown("""
-    - 🌾 **फसल बीमा (PMFBY):** `14447` (टोल-फ्री)
-    - 🚜 **किसान सम्मान निधि:** `155261` / `1800-115-526`
-    - 🩺 **आयुष्मान भारत:** `14555`
-    - 🏠 **ग्रामीण आवास (PMAY-G):** `1800-11-6446`
-    - 👷 **मनरेगा (MGNREGA):** `1800-345-6565`
-    - 🌐 **राष्ट्रीय myScheme पोर्टल:** [myscheme.gov.in](https://www.myscheme.gov.in/)
-    """)
-
-    st.markdown("---")
-    if st.button("🔄 बातचीत पुनः आरंभ करें (Reset)", use_container_width=True):
-        st.session_state.conversation = []
-        st.session_state.gathered_facts = {}
-        st.session_state.voice_input_text = ""
-        st.session_state.checked_documents = {}
+with top_col3:
+    lang_choice = st.radio(
+        "Language / भाषा",
+        ["English", "हिंदी"],
+        index=0 if st.session_state.lang == "en" else 1,
+        horizontal=True,
+        label_visibility="collapsed"
+    )
+    new_lang = "en" if lang_choice == "English" else "hi"
+    if new_lang != st.session_state.lang:
+        st.session_state.lang = new_lang
         st.rerun()
 
 
-# --- MAIN HEADER BANNER ---
-st.markdown("""
-<div class="main-header">
-    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
-        <div>
-            <h1>🌾 स्कीम साथी (Scheme Saathi)</h1>
-            <p>आपकी समस्या, सरकारी मदद का सही रास्ता।</p>
-            <div>
-                <span class="header-badge">🗣️ सरल हिंदी में समझें</span>
-                <span class="header-badge">🎤 बोलकर पूछें (Voice Enabled)</span>
-                <span class="header-badge">🏛️ 100% सत्यापित सरकारी स्रोत</span>
-            </div>
-        </div>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+# --- SIDEBAR (SETTINGS & HELPLINES ONLY - OUT OF THE WAY) ---
+with st.sidebar:
+    st.markdown(f"### ⚙️ {('Settings' if st.session_state.lang == 'en' else 'सेटिंग्स')}")
+    st.caption("Scheme Saathi runs seamlessly out-of-the-box in Demo Mode without requiring an API key.")
+
+    user_key = st.text_input(
+        "Gemini API Key (Optional)",
+        value=st.session_state.custom_api_key,
+        type="password"
+    )
+    if user_key != st.session_state.custom_api_key:
+        st.session_state.custom_api_key = user_key
+        st.rerun()
+
+    model_sel = st.selectbox("AI Model", ["gemini-2.5-flash", "gemini-1.5-flash"], index=0)
+    ai_svc.model_name = model_sel
+
+    st.markdown("---")
+    st.markdown(f"### 📞 {('Emergency Helplines' if st.session_state.lang == 'en' else 'सरकारी हेल्पलाइन')}")
+    st.markdown("""
+    - 🌾 **PMFBY Crop Insurance:** `14447`
+    - 🚜 **PM-KISAN Helpline:** `155261`
+    - 🩺 **Ayushman Health:** `14555`
+    - 🏠 **Rural Housing:** `1800-11-6446`
+    - 🌐 **myScheme Portal:** [myscheme.gov.in](https://www.myscheme.gov.in/)
+    """)
+
+    if st.button(L["reset_btn"], use_container_width=True):
+        st.session_state.conversation = []
+        st.session_state.gathered_facts = {}
+        st.session_state.user_input_val = ""
+        st.rerun()
 
 
-# --- MAIN TABS ---
-tab_chat, tab_schemes, tab_documents, tab_telephony, tab_about = st.tabs([
-    "💬 योजना सहायक (Chat Assistant)",
-    "📚 सरकारी योजनाएं (Scheme Directory)",
-    "📑 दस्तावेज़ चेकलिस्ट (Document Checklist)",
-    "📞 फोन कॉल सेवा (Future Telephony)",
-    "ℹ️ स्कीम साथी के बारे में (About)"
+# --- STREAMLINED TABS (EASY TO ACCESS) ---
+tab_chat, tab_schemes, tab_checklist, tab_ivr = st.tabs([
+    L["assistant_tab"],
+    L["schemes_tab"],
+    L["checklist_tab"],
+    L["phone_tab"]
 ])
 
 
 # ==============================================================================
-# TAB 1: CHAT ASSISTANT & VOICE JOURNEY
+# TAB 1: CONVERSATION ASSISTANT (CLEAN, MINIMAL, FAST)
 # ==============================================================================
 with tab_chat:
-    # Quick Test Scenario Chips (For Hackathon Judges)
-    st.markdown("##### ⚡ तुरंत पूछने के लिए कोई एक उदाहरण चुनें (Click to Demo):")
-    sc1, sc2, sc3, sc4 = st.columns([1, 1, 1, 1])
-
-    with sc1:
-        if st.button("🌧️ Scenario A: फसल खराब", help="मेरी फसल बारिश से खराब हो गई है। मुझे सरकारी मदद चाहिए।", use_container_width=True):
-            st.session_state.voice_input_text = "मेरी फसल बारिश से खराब हो गई है। मुझे सरकारी मदद चाहिए।"
-            st.rerun()
-    with sc2:
-        if st.button("🚜 Scenario B: किसान सहायता", help="मैं किसान हूँ। मुझे खेती के लिए सरकारी सहायता चाहिए।", use_container_width=True):
-            st.session_state.voice_input_text = "मैं किसान हूँ। मुझे खेती के लिए सरकारी सहायता चाहिए।"
-            st.rerun()
-    with sc3:
-        if sc3.button("🏪 Scenario C: अन्य समस्या", help="मेरी दुकान में चोरी हो गई है, मुझे मुआवजा चाहिए।", use_container_width=True):
-            st.session_state.voice_input_text = "मेरी दुकान में चोरी हो गई है, मुझे मुआवजा चाहिए।"
-            st.rerun()
-    with sc4:
-        if sc4.button("🏥 अस्पताल इलाज सहायता", help="परिवार के इलाज के लिए अस्पताल का खर्च चाहिए।", use_container_width=True):
-            st.session_state.voice_input_text = "परिवार के इलाज के लिए अस्पताल का खर्च चाहिए।"
+    # 1. Quick Example Chips (Clean 1-Click Access)
+    st.markdown(f"**{L['quick_label']}**")
+    chip_cols = st.columns(5)
+    chips = [
+        (chip_cols[0], L["chip_a"], L["text_a"]),
+        (chip_cols[1], L["chip_b"], L["text_b"]),
+        (chip_cols[2], L["chip_c"], L["text_c"]),
+        (chip_cols[3], L["chip_d"], L["text_d"]),
+        (chip_cols[4], L["chip_e"], L["text_e"]),
+    ]
+    for col, label, query_text in chips:
+        if col.button(label, use_container_width=True):
+            st.session_state.user_input_val = query_text
             st.rerun()
 
-    st.markdown("<br>", unsafe_allow_html=True)
+    # 2. Compact Voice & Text Input
+    rec_lang = "en-IN" if st.session_state.lang == "en" else "hi-IN"
+    mic_label = "🎙️ Speak in English" if st.session_state.lang == "en" else "🎙️ हिंदी में बोलें"
 
-    # Browser Web Speech API Voice Input Widget
-    st.markdown("#### 🎤 बोलकर बताएं या लिखकर पूछें:")
-
-    voice_html = """
-    <div style="background: #F1F8E9; border: 2px dashed #4CAF50; border-radius: 12px; padding: 16px; text-align: center; font-family: 'Mukta', sans-serif;">
-        <button id="start-record-btn" style="background: #E65100; color: white; border: none; padding: 12px 24px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(230,81,0,0.3);">
-            <span id="mic-icon">🎤</span> <span id="btn-text">यहाँ दबाकर हिंदी में बोलें</span>
+    voice_html = f"""
+    <div style="display: flex; align-items: center; justify-content: space-between; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 8px 14px; margin: 10px 0;">
+        <span style="font-size: 14px; color: #475569; font-weight: 500;">
+            🎤 {('Browser Voice Input (Speech-to-Text)' if st.session_state.lang == 'en' else 'ब्राउज़र माइक (बोलकर पूछें)')}
+        </span>
+        <button id="mic-btn" style="background: #16A34A; color: white; border: none; padding: 6px 14px; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer;">
+            {mic_label}
         </button>
-        <p id="record-status" style="margin-top: 10px; color: #555; font-size: 15px; font-weight: 500;">
-            माइक बटन दबाएं और स्पष्ट हिंदी में अपनी समस्या बताएं।
-        </p>
-        <div id="transcript-display" style="display: none; background: white; border: 1px solid #C8E6C9; border-radius: 8px; padding: 10px; margin-top: 10px; font-size: 16px; color: #1B5E20; text-align: left;">
-            <strong>सुनाई दिया:</strong> <span id="transcript-text"></span>
-        </div>
     </div>
+    <div id="mic-status" style="font-size: 13px; color: #64748B; margin-left: 6px; display: none;"></div>
 
     <script>
-    const recordBtn = document.getElementById('start-record-btn');
-    const recordStatus = document.getElementById('record-status');
-    const transcriptDisplay = document.getElementById('transcript-display');
-    const transcriptText = document.getElementById('transcript-text');
-    let recognizing = false;
-    let recognition;
+    const btn = document.getElementById('mic-btn');
+    const status = document.getElementById('mic-status');
+    let listening = false;
+    let rec;
 
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-        const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-        recognition = new SpeechRec();
-        recognition.continuous = false;
-        recognition.interimResults = true;
-        recognition.lang = 'hi-IN';
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {{
+        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+        rec = new SR();
+        rec.lang = '{rec_lang}';
+        rec.continuous = false;
 
-        recognition.onstart = function() {
-            recognizing = true;
-            recordBtn.style.background = '#D32F2F';
-            recordBtn.innerHTML = '🛑 <span>सुन रहे हैं... (बोलना बंद करने पर रुकेगा)</span>';
-            recordStatus.innerText = 'कृपया बोलिए, आपकी आवाज़ रिकॉर्ड हो रही है...';
-            recordStatus.style.color = '#D32F2F';
-        };
+        rec.onstart = function() {{
+            listening = true;
+            btn.style.background = '#DC2626';
+            btn.innerText = '🛑 Listening...';
+            status.style.display = 'block';
+            status.innerText = 'Listening to your microphone...';
+        }};
 
-        recognition.onresult = function(event) {
-            let interimTranscript = '';
-            let finalTranscript = '';
-            for (let i = event.resultIndex; i < event.results.length; ++i) {
-                if (event.results[i].isFinal) {
-                    finalTranscript += event.results[i][0].transcript;
-                } else {
-                    interimTranscript += event.results[i][0].transcript;
-                }
-            }
-            const currentText = finalTranscript || interimTranscript;
-            if (currentText) {
-                transcriptDisplay.style.display = 'block';
-                transcriptText.innerText = currentText;
-            }
-        };
+        rec.onresult = function(e) {{
+            const text = e.results[0][0].transcript;
+            status.style.color = '#15803D';
+            status.innerText = 'Recorded: "' + text + '" (Copy or paste into input below)';
+            // Attempt to update textarea if accessible
+            const textareas = window.parent.document.querySelectorAll('textarea');
+            if (textareas.length > 0) {{
+                textareas[0].value = text;
+                textareas[0].dispatchEvent(new Event('input', {{ bubbles: true }}));
+            }}
+        }};
 
-        recognition.onerror = function(event) {
-            recognizing = false;
-            recordBtn.style.background = '#E65100';
-            recordBtn.innerHTML = '🎤 <span>पुनः प्रयास करें</span>';
-            if (event.error === 'not-allowed') {
-                recordStatus.innerText = '⚠️ माइक्रोफोन की अनुमति नहीं मिली। कृपया ब्राउज़र में माइक की अनुमति दें या नीचे टाइप करें।';
-            } else {
-                recordStatus.innerText = 'सूचना: आवाज़ पकड़ने में समस्या हुई (' + event.error + ')। आप नीचे लिखकर भी पूछ सकते हैं।';
-            }
-            recordStatus.style.color = '#C62828';
-        };
+        rec.onerror = function(e) {{
+            listening = false;
+            btn.style.background = '#16A34A';
+            btn.innerText = '{mic_label}';
+            status.style.color = '#DC2626';
+            status.innerText = 'Mic notice: ' + e.error + '. You can type directly below.';
+        }};
 
-        recognition.onend = function() {
-            recognizing = false;
-            recordBtn.style.background = '#2E7D32';
-            recordBtn.innerHTML = '✅ <span>आवाज़ दर्ज हुई (नीचे बॉक्स में देखें)</span>';
-            recordStatus.innerText = 'यदि आपकी आवाज़ सही से दर्ज हुई है, तो नीचे दिए गए बॉक्स में जाँच कर "पूछें" दबाएं।';
-            recordStatus.style.color = '#2E7D32';
-        };
+        rec.onend = function() {{
+            listening = false;
+            btn.style.background = '#16A34A';
+            btn.innerText = '{mic_label}';
+        }};
 
-        recordBtn.onclick = function() {
-            if (recognizing) {
-                recognition.stop();
-            } else {
-                recognition.start();
-            }
-        };
-    } else {
-        recordBtn.disabled = true;
-        recordBtn.style.background = '#9E9E9E';
-        recordBtn.innerHTML = '⚠️ <span>ब्राउज़र में वॉइस सपोर्ट उपलब्ध नहीं</span>';
-        recordStatus.innerText = 'आपके ब्राउज़र में Web Speech API समर्थित नहीं है। आप नीचे दिए गए इनपुट बॉक्स में आसानी से टाइप कर सकते हैं।';
-    }
+        btn.onclick = function() {{
+            if (listening) {{ rec.stop(); }} else {{ rec.start(); }}
+        }};
+    }} else {{
+        btn.disabled = true;
+        btn.style.background = '#94A3B8';
+        btn.innerText = 'Voice Unsupported';
+        status.style.display = 'block';
+        status.innerText = 'Speech recognition not supported in this browser. Please type below.';
+    }}
     </script>
     """
-    components.html(voice_html, height=185)
+    components.html(voice_html, height=75)
 
-    # Text Input Form
-    with st.form("query_form", clear_on_submit=False):
-        user_input = st.text_area(
-            "अपनी समस्या यहाँ सरल शब्दों में लिखें (Type your question in Hindi):",
-            value=st.session_state.voice_input_text,
-            height=90,
-            placeholder="उदाहरण: मेरी फसल बारिश से खराब हो गई है, क्या मुझे मुआवजा मिलेगा?"
+    with st.form("main_query_form", clear_on_submit=False):
+        user_text = st.text_area(
+            L["input_label"],
+            value=st.session_state.user_input_val,
+            height=70,
+            placeholder=L["input_placeholder"],
+            label_visibility="collapsed"
         )
-        col_submit, col_clear = st.columns([3, 1])
-        with col_submit:
-            submitted = st.form_submit_button("🔍 योजना खोजें एवं सलाह लें (Ask Scheme Saathi)", use_container_width=True)
-        with col_clear:
-            clear_pressed = st.form_submit_button("साफ करें", use_container_width=True)
+        col_btn1, col_btn2 = st.columns([4, 1])
+        with col_btn1:
+            submit_pressed = st.form_submit_button(L["ask_btn"], use_container_width=True)
+        with col_btn2:
+            clear_pressed = st.form_submit_button(L["clear_btn"], use_container_width=True)
 
     if clear_pressed:
-        st.session_state.voice_input_text = ""
+        st.session_state.user_input_val = ""
         st.rerun()
 
-    # Process Query Submission
-    if submitted and user_input.strip():
-        query_text = user_input.strip()
-        st.session_state.voice_input_text = ""
+    # Process Query
+    if submit_pressed and user_text.strip():
+        query = user_text.strip()
+        st.session_state.user_input_val = ""
 
-        # Append to conversation history
-        st.session_state.conversation.append({
-            "role": "user",
-            "content": query_text
-        })
+        st.session_state.conversation.append({"role": "user", "content": query})
 
-        with st.spinner("🤖 स्कीम साथी आपकी समस्या का विश्लेषण कर रहे हैं..."):
-            response_obj = ai_svc.process_query(
-                user_message=query_text,
+        with st.spinner("Analyzing request..." if st.session_state.lang == "en" else "विश्लेषण हो रहा है..."):
+            resp = ai_svc.process_query(
+                user_message=query,
                 conversation_history=[{"role": c["role"], "content": c["content"]} for c in st.session_state.conversation],
-                gathered_facts=st.session_state.gathered_facts
+                gathered_facts=st.session_state.gathered_facts,
+                preferred_lang=st.session_state.lang
             )
 
         st.session_state.conversation.append({
             "role": "assistant",
-            "content": response_obj.reply_hi,
-            "response_obj": response_obj
+            "content": resp.reply,
+            "response_obj": resp
         })
         st.rerun()
 
-    # Display Conversation History
+    # Conversation Display
     if not st.session_state.conversation:
-        st.markdown("""
-        <div class="saathi-card">
-            <h3>🙏 राम-राम भाई जी! स्कीम साथी में आपका स्वागत है।</h3>
-            <p style="font-size: 1.15rem; color: #424242;">
-                हम ग्रामीण भारत के किसान भाइयों, मजदूर परिवारों और जरूरतमंद नागरिकों को 
-                सरकारी योजनाओं की सही और प्रमाणित जानकारी सरल हिंदी में देते हैं।
-            </p>
-            <p style="font-size: 1.1rem; color: #2E7D32; font-weight: 600;">
-                आप बेझिझक बोलकर या लिखकर बताएं — जैसे फसल नुकसान, खाद-बीज का खर्च, पक्का मकान, या बीमारी का मुफ्त इलाज!
+        st.markdown(f"""
+        <div class="card-clean" style="text-align: center; padding: 2rem;">
+            <h3 style="color: #15803D; margin-bottom: 0.5rem;">🌾 {L['title']}</h3>
+            <p style="color: #475569; font-size: 1.05rem; max-width: 650px; margin: 0 auto;">
+                {L['desc']}
             </p>
         </div>
         """, unsafe_allow_html=True)
     else:
-        st.markdown("### 💬 आपकी बातचीत (Conversation History)")
-
-        for idx, msg in enumerate(st.session_state.conversation):
-            if msg["role"] == "user":
-                with st.chat_message("user", avatar="👨‍🌾"):
-                    st.markdown(f"**आप:** {msg['content']}")
+        for idx, item in enumerate(st.session_state.conversation):
+            if item["role"] == "user":
+                with st.chat_message("user", avatar="👤"):
+                    st.markdown(f"**You:** {item['content']}")
             else:
-                resp_obj: SchemeSaathiResponse = msg.get("response_obj")
+                resp: SchemeSaathiResponse = item.get("response_obj")
                 with st.chat_message("assistant", avatar="🌾"):
-                    # Mode indicator
-                    st.caption(f"स्रोत: {resp_obj.mode}")
+                    # Main Reply
+                    st.markdown(resp.reply)
 
-                    # Main Conversational Hindi Reply
-                    st.markdown(f"### 🌾 स्कीम साथी का सुझाव:")
-                    st.markdown(resp_obj.reply_hi)
+                    # Audio Player Control
+                    aud_col, _ = st.columns([2, 5])
+                    with aud_col:
+                        if st.button(f"{L['listen_btn']} #{idx}", key=f"tts_btn_{idx}"):
+                            aud_bytes = TTSService.generate_audio(resp.reply, lang=st.session_state.lang)
+                            if aud_bytes:
+                                st.audio(aud_bytes, format="audio/mp3", autoplay=True)
 
-                    # Text-to-Speech Controls
-                    speech_text = resp_obj.reply_hi
-                    if resp_obj.follow_up_question_hi:
-                        speech_text += " " + resp_obj.follow_up_question_hi
-
-                    tts_col1, tts_col2 = st.columns([1, 3])
-                    with tts_col1:
-                        if st.button(f"🔊 सुनें (Listen Audio) #{idx}", key=f"audio_btn_{idx}"):
-                            audio_bytes = TTSService.generate_hindi_audio(speech_text)
-                            if audio_bytes:
-                                st.audio(audio_bytes, format="audio/mp3", autoplay=True)
-                            else:
-                                st.info("ऑडियो तैयार किया जा रहा है...")
-
-                    # Unknown Problem Guidance (Scenario C)
-                    if resp_obj.is_unknown_domain:
+                    # Scenario C: Out of Scope / myScheme Redirection
+                    if resp.is_unknown_domain:
                         myscheme = scheme_svc.get_myscheme_info()
                         st.markdown(f"""
-                        <div class="saathi-card-alert">
-                            <h4>🌐 आधिकारिक myScheme पोर्टल पर खोजें:</h4>
-                            <p>{myscheme.get('description_hi', '')}</p>
-                            <a href="{myscheme.get('official_url')}" target="_blank" style="display: inline-block; background: #E65100; color: white; padding: 8px 18px; border-radius: 8px; text-decoration: none; font-weight: bold;">
-                                🔗 myScheme पोर्टल खोलें ({myscheme.get('official_url')})
+                        <div class="card-alert">
+                            <strong>{L['myscheme_card_title']}</strong>
+                            <p style="margin: 6px 0;">{myscheme.get('description' if st.session_state.lang == 'en' else 'description_hi')}</p>
+                            <a href="{myscheme.get('official_url')}" target="_blank" style="display: inline-block; background: #0F172A; color: white; padding: 6px 14px; border-radius: 6px; text-decoration: none; font-size: 0.9rem; font-weight: 600;">
+                                {L['myscheme_btn']} ↗
                             </a>
                         </div>
                         """, unsafe_allow_html=True)
 
-                    # Follow-up Question Section (1 concise question)
-                    if resp_obj.follow_up_question_hi:
+                    # Follow-up Question
+                    if resp.follow_up_question:
                         st.markdown(f"""
-                        <div class="saathi-card-alert">
-                            <h4 style="margin-top:0; color: #E65100;">❓ स्कीम साथी का एक ज़रूरी सवाल:</h4>
-                            <p style="font-size: 1.15rem; font-weight: 600; margin-bottom: 0.5rem;">
-                                {resp_obj.follow_up_question_hi}
-                            </p>
+                        <div class="card-alert">
+                            <strong style="color: #B45309;">{L['follow_up_title']}</strong>
+                            <div style="font-size: 1.02rem; font-weight: 600; margin-top: 4px;">{resp.follow_up_question}</div>
                         </div>
                         """, unsafe_allow_html=True)
 
-                        # Quick reply options for common follow-ups
-                        q_col1, q_col2, q_col3 = st.columns(3)
-                        with q_col1:
-                            if st.button("✅ हाँ, मेरे नाम ज़मीन है", key=f"ans_yes_land_{idx}"):
-                                st.session_state.gathered_facts["is_landowner"] = True
-                                st.session_state.voice_input_text = "हाँ, मेरे नाम पर ज़मीन (खतौनी) दर्ज है।"
-                                st.rerun()
-                        with q_col2:
-                            if st.button("⏱️ नुकसान 72 घंटे के अंदर हुआ है", key=f"ans_72h_{idx}"):
-                                st.session_state.gathered_facts["loss_within_72h"] = True
-                                st.session_state.voice_input_text = "हाँ, फसल नुकसान को अभी 72 घंटे नहीं हुए हैं।"
-                                st.rerun()
-                        with q_col3:
-                            if st.button("💳 बैंक खाता आधार से लिंक है", key=f"ans_aadhaar_{idx}"):
-                                st.session_state.gathered_facts["has_aadhaar"] = True
-                                st.session_state.voice_input_text = "हाँ, मेरा बैंक खाता आधार से लिंक है।"
-                                st.rerun()
-
                     # Recommended Schemes Cards
-                    if resp_obj.recommended_schemes:
-                        st.markdown("#### 🎯 संबंधित सरकारी योजनाएं (Recommended Schemes):")
-
-                        for s in resp_obj.recommended_schemes:
+                    if resp.recommended_schemes:
+                        st.markdown(f"#### {L['recommendations_title']}")
+                        for s in resp.recommended_schemes:
                             assessment = s.get("assessment", {})
-                            status_label = assessment.get("status_label_hi", "संभावित पात्र")
+                            status_badge = assessment.get("status_label_en" if st.session_state.lang == "en" else "status_label_hi", "Eligible")
+                            scheme_title = s["name"] if st.session_state.lang == "en" else s["name_hi"]
+                            scheme_purpose = s.get("purpose", s.get("purpose_hi")) if st.session_state.lang == "en" else s.get("purpose_hi")
+                            benefits_list = s.get("benefits", []) if st.session_state.lang == "en" else s.get("benefits_hi", [])
 
-                            with st.expander(f"🏛️ {s['name_hi']} — {status_label}", expanded=True):
-                                # Scheme Metadata & Last Verified
-                                m_col1, m_col2 = st.columns([2, 1])
-                                with m_col1:
-                                    st.caption(f"मंत्रालय: {s.get('ministry_hi', s.get('ministry', ''))}")
-                                with m_col2:
-                                    st.caption(f"✅ सत्यापित तिथि: {s.get('last_verified', 'अक्टूबर 2024')}")
+                            with st.expander(f"🏛️ {scheme_title} — {status_badge}", expanded=True):
+                                st.markdown(f"**{('Summary' if st.session_state.lang == 'en' else 'उद्देश्य')}:** {scheme_purpose}")
 
-                                # Scheme Details Sub-tabs
-                                sub_tab1, sub_tab2, sub_tab3, sub_tab4 = st.tabs([
-                                    "💰 लाभ एवं फायदे",
-                                    "🎯 पात्रता व शर्तें",
-                                    "📑 आवश्यक दस्तावेज़",
-                                    "🚀 आवेदन कैसे करें"
-                                ])
+                                b_col1, b_col2 = st.columns(2)
+                                with b_col1:
+                                    st.markdown(f"**{('Key Benefits' if st.session_state.lang == 'en' else 'प्रमुख लाभ')}:**")
+                                    for b in benefits_list[:2]:
+                                        st.write(f"- {b}")
+                                with b_col2:
+                                    st.markdown(f"**{('Official Links & Contact' if st.session_state.lang == 'en' else 'आधिकारिक संपर्क')}:**")
+                                    st.write(f"📞 {L['helpline']}: `{s.get('helpline', '1800-180-1551')}`")
+                                    st.markdown(f"🔗 [{L['official_source']}]({s.get('official_source', '#')})")
 
-                                with sub_tab1:
-                                    st.markdown(f"**उद्देश्य:** {s['purpose_hi']}")
-                                    st.markdown("**योजना के प्रमुख लाभ:**")
-                                    for b in s.get("benefits_hi", []):
-                                        st.markdown(f"- {b}")
-
-                                with sub_tab2:
-                                    st.markdown(f"**पात्रता स्थिति:** {status_label}")
-                                    if assessment.get("reasons_hi"):
-                                        st.success("✅ पूरी की गई शर्तें:")
-                                        for r in assessment["reasons_hi"]:
-                                            st.markdown(f"- {r}")
-
-                                    if assessment.get("ineligible_reasons_hi"):
-                                        st.error("❌ अपात्रता के कारण:")
-                                        for ir in assessment["ineligible_reasons_hi"]:
-                                            st.markdown(f"- {ir}")
-
-                                    if assessment.get("missing_info_hi"):
-                                        st.warning("⚠️ पुष्टि के लिए आवश्यक जानकारी:")
-                                        for mi in assessment["missing_info_hi"]:
-                                            st.markdown(f"- {mi}")
-
-                                    st.markdown("**आधिकारिक पात्रता नियम:**")
-                                    for el in s.get("eligibility_hi", []):
-                                        st.markdown(f"- {el}")
-
-                                    if s.get("exclusions_hi"):
-                                        st.markdown("**कौन पात्र नहीं हैं (बहिष्करण):**")
-                                        for ex in s["exclusions_hi"]:
-                                            st.markdown(f"- {ex}")
-
-                                with sub_tab3:
-                                    st.markdown("**आवेदन के लिए आवश्यक दस्तावेज़:**")
-                                    for doc in s.get("required_documents", []):
-                                        st.markdown(f"- 📄 {doc}")
-
-                                with sub_tab4:
-                                    st.markdown("**आवेदन करने के चरण:**")
-                                    for stp in s.get("application_steps_hi", []):
-                                        st.markdown(stp)
-
-                                    st.markdown("---")
-                                    link_col1, link_col2 = st.columns([1, 1])
-                                    with link_col1:
-                                        st.markdown(f"🌐 **आधिकारिक पोर्टल:** [{s['official_source']}]({s['official_source']})")
-                                    with link_col2:
-                                        st.markdown(f"📞 **हेल्पलाइन नंबर:** `{s.get('helpline', '1800-180-1551')}`")
-
-                    # Step-by-Step Action Checklist
-                    if resp_obj.checklist:
-                        st.markdown("#### ✅ आगे क्या करें — आसान चेकलिस्ट (Next Steps):")
-                        for idx_step, step in enumerate(resp_obj.checklist, 1):
+                    # Next Steps Checklist
+                    if resp.checklist:
+                        st.markdown(f"#### {L['next_steps_title']}")
+                        for step_i, step_text in enumerate(resp.checklist, 1):
                             st.markdown(f"""
-                            <div class="checklist-item">
-                                <strong>कदम {idx_step}:</strong> {step}
+                            <div class="step-item">
+                                <strong>{step_i}.</strong> {step_text}
                             </div>
                             """, unsafe_allow_html=True)
 
                     # Disclaimer
-                    st.markdown(f"""
-                    <div class="disclaimer-box">
-                        {resp_obj.disclaimer_hi}
-                    </div>
-                    """, unsafe_allow_html=True)
+                    st.markdown(f"<div class='disclaimer-clean'>{resp.disclaimer}</div>", unsafe_allow_html=True)
 
 
 # ==============================================================================
-# TAB 2: COMPREHENSIVE SCHEMES DIRECTORY
+# TAB 2: SCHEMES DIRECTORY (CLEAN & SCANNABLE)
 # ==============================================================================
 with tab_schemes:
-    st.markdown("### 📚 सत्यापित सरकारी योजनाओं की डायरेक्टरी")
-    st.write("स्कीम साथी के ज्ञानकोष में दर्ज सभी योजनाएं आधिकारिक सरकारी स्रोतों (Official Government Portals) से सत्यापित हैं।")
+    st.markdown(f"### 📋 {('Verified Government Schemes' if st.session_state.lang == 'en' else 'सत्यापित सरकारी योजनाएं')}")
+    st.caption("All scheme conditions, financial amounts, and helpline numbers are verified against official .gov.in portals.")
 
-    all_schemes = scheme_svc.get_all_schemes()
-
-    category_filter = st.selectbox(
-        "योजना की श्रेणी चुनें (Filter by Category):",
-        ["सभी योजनाएं (All)", "कृषि एवं फसल बीमा (Agriculture & Insurance)", "स्वास्थ्य एवं सामाजिक सुरक्षा (Health & Social Security)", "ग्रामीण आवास एवं रोजगार (Housing & Jobs)"]
+    search_term = st.text_input(
+        "Search Schemes / योजना खोजें",
+        placeholder="Type scheme name or keyword (e.g., crop, PM-KISAN, housing, loan)..."
     )
 
-    filtered = all_schemes
-    if "कृषि" in category_filter:
-        filtered = [s for s in all_schemes if s["id"] in ["pm_kisan", "pmfby", "kcc"]]
-    elif "स्वास्थ्य" in category_filter:
-        filtered = [s for s in all_schemes if s["id"] in ["pmjay", "pm_kmy"]]
-    elif "आवास" in category_filter:
-        filtered = [s for s in all_schemes if s["id"] in ["pmay_g", "mgnrega"]]
+    all_schemes = scheme_svc.get_all_schemes()
+    if search_term.strip():
+        all_schemes = [s for s in all_schemes if search_term.lower() in s["name"].lower() or search_term.lower() in s["name_hi"].lower() or search_term.lower() in " ".join(s.get("keywords", [])).lower()]
 
-    for s in filtered:
-        with st.container():
-            st.markdown(f"""
-            <div class="saathi-card">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-                    <h3 style="color: #1B5E20; margin: 0;">🏛️ {s['name_hi']}</h3>
-                    <span style="background: #E8F5E9; color: #2E7D32; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 0.85rem;">
-                        सत्यापित: {s.get('last_verified', 'अक्टूबर 2024')}
-                    </span>
-                </div>
-                <p style="color: #616161; margin-top: 4px;"><em>{s['name']} — {s.get('ministry_hi', '')}</em></p>
-                <p style="font-size: 1.1rem; color: #212121;">{s['purpose_hi']}</p>
+    for s in all_schemes:
+        name_show = s["name"] if st.session_state.lang == "en" else s["name_hi"]
+        purpose_show = s.get("purpose", s.get("purpose_hi")) if st.session_state.lang == "en" else s.get("purpose_hi")
+        benefits_show = s.get("benefits", []) if st.session_state.lang == "en" else s.get("benefits_hi", [])
+
+        st.markdown(f"""
+        <div class="card-clean">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h4 style="color:#15803D; margin:0;">🏛️ {name_show}</h4>
+                <span class="pill-gemini">Verified: {s.get('last_verified', 'Oct 2024')}</span>
             </div>
-            """, unsafe_allow_html=True)
-
-            c1, c2, c3 = st.columns([1, 1, 1])
-            with c1:
-                st.markdown("**💰 मुख्य लाभ:**")
-                for b in s.get("benefits_hi", [])[:2]:
-                    st.write(f"- {b}")
-            with c2:
-                st.markdown("**🎯 कौन पात्र है:**")
-                for el in s.get("eligibility_hi", [])[:2]:
-                    st.write(f"- {el}")
-            with c3:
-                st.markdown("**🌐 आधिकारिक संपर्क:**")
-                st.write(f"📞 हेल्पलाइन: `{s.get('helpline', 'उपलब्ध नहीं')}`")
-                st.markdown(f"[🔗 आधिकारिक वेबसाइट]({s.get('official_source', '#')})")
-            st.markdown("---")
-
-    # myScheme Portal Banner
-    myscheme = scheme_svc.get_myscheme_info()
-    st.markdown(f"""
-    <div class="saathi-card-alert" style="text-align: center;">
-        <h3>🌐 क्या आप अन्य 750+ सरकारी योजनाएं खोजना चाहते हैं?</h3>
-        <p>{myscheme.get('description_hi')}</p>
-        <a href="{myscheme.get('official_url')}" target="_blank" style="background: #E65100; color: white; padding: 10px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 1.1rem; display: inline-block;">
-            🇮🇳 myScheme आधिकारिक पोर्टल खोलें
-        </a>
-    </div>
-    """, unsafe_allow_html=True)
-
-
-# ==============================================================================
-# TAB 3: DOCUMENT CHECKLIST (INTERACTIVE)
-# ==============================================================================
-with tab_documents:
-    st.markdown("### 📑 सरकारी योजनाओं के लिए ज़रूरी दस्तावेज़ चेकलिस्ट")
-    st.write("सरकारी योजनाओं का लाभ लेने के लिए अपने दस्तावेज़ पहले से तैयार रखें। आप नीचे टिक लगाकर अपनी तैयारी जांच सकते हैं:")
-
-    col_docs1, col_docs2 = st.columns(2)
-
-    with col_docs1:
-        st.markdown("#### 🌾 कृषि एवं किसान योजनाएं (PM-KISAN, PMFBY, KCC)")
-        st.checkbox("1. आधार कार्ड (Aadhaar Card - अनिवार्य)", key="doc_aadhaar")
-        st.checkbox("2. ज़मीन का भू-अभिलेख / खसरा-खतौनी नकल (Khasra/Khatauni)", key="doc_land")
-        st.checkbox("3. आधार लिंक बैंक पासबुक (Aadhaar Seeded Bank Account)", key="doc_bank")
-        st.checkbox("4. बुआई प्रमाण पत्र / पटवारी घोषणा पत्र (Sowing Certificate)", key="doc_sowing")
-        st.checkbox("5. फसल नुकसान की फोटो (72 घंटे के अंदर पीएमएफबीवाई हेतु)", key="doc_damage_photo")
-
-    with col_docs2:
-        st.markdown("#### 🏠 आवास, स्वास्थ्य एवं सामाजिक सुरक्षा (PM-JAY, PMAY-G, MGNREGA)")
-        st.checkbox("6. राशन कार्ड / परिवार पहचान पत्र (Family ID / NFSA Ration Card)", key="doc_ration")
-        st.checkbox("7. मनरेगा जॉब कार्ड (MGNREGA Job Card)", key="doc_mgnrega_card")
-        st.checkbox("8. कच्चे मकान की वर्तमान फोटो (AwaasApp Verification हेतु)", key="doc_kutcha_house")
-        st.checkbox("9. पासपोर्ट साइज़ फोटोग्राफ (Passport Size Photos)", key="doc_photo")
-        st.checkbox("10. सक्रिय मोबाइल नंबर (ओटीपी एवं ई-केवाईसी हेतु)", key="doc_mobile")
-
-    # Document Preparedness Score
-    docs_checked = sum([
-        st.session_state.get("doc_aadhaar", False),
-        st.session_state.get("doc_land", False),
-        st.session_state.get("doc_bank", False),
-        st.session_state.get("doc_sowing", False),
-        st.session_state.get("doc_damage_photo", False),
-        st.session_state.get("doc_ration", False),
-        st.session_state.get("doc_mgnrega_card", False),
-        st.session_state.get("doc_kutcha_house", False),
-        st.session_state.get("doc_photo", False),
-        st.session_state.get("doc_mobile", False),
-    ])
-    st.progress(docs_checked / 10.0)
-    st.info(f"📊 आपकी दस्तावेज़ तैयारी: 10 में से {docs_checked} दस्तावेज़ तैयार हैं।")
-
-    st.markdown("""
-    > [!IMPORTANT]
-    > **गोपनीयता सूचना (Privacy Note):** स्कीम साथी एक डेमो व मार्गदर्शन प्रणाली है। हम कभी भी आपका असली आधार नंबर, बैंक खाता संख्या, पासवर्ड या ओटीपी नहीं मांगते। किसी भी अनधिकृत व्यक्ति को अपना बैंक विवरण न दें।
-    """)
-
-
-# ==============================================================================
-# TAB 4: TELEPHONY & IVR FUTURE ARCHITECTURE
-# ==============================================================================
-with tab_telephony:
-    st.markdown("### 📞 भविष्य का विजन: सामान्य फोन कॉल हेल्पलाइन (Toll-Free IVR)")
-    st.markdown("""
-    **दीर्घकालिक लक्ष्य:** ग्रामीण भारत में कई बुजुर्गों और नागरिकों के पास स्मार्टफोन या इंटरनेट नहीं होता। 
-    हमारा उद्देश्य एक **टोल-फ्री फोन नंबर (जैसे 1800-XXX-XXXX)** प्रदान करना है, जिस पर कोई भी सामान्य फीचर फोन से कॉल करके 
-    स्कीम साथी के इसी AI इंजन से शुद्ध हिंदी में बातचीत कर सके।
-    """)
-
-    # Interactive Telephony Flow Simulator
-    st.markdown("#### 🎧 फोन कॉल बातचीत सिमुलेटर (Interactive Call Simulator):")
-
-    telephony_svc = TelephonyService()
-
-    sim_col1, sim_col2 = st.columns([1, 1])
-
-    with sim_col1:
-        st.markdown("""
-        <div style="background: #263238; color: white; border-radius: 12px; padding: 1.2rem; font-family: monospace;">
-            <p style="color: #4CAF50; font-weight: bold;">📞 INCOMING CALL DETECTED: +91 98765-XXXXX</p>
-            <p>1. [PSTN Carrier] -> Call Received via Exotel/Twilio SIP Trunk</p>
-            <p>2. [IVR Greeting] -> "नमस्ते। स्कीम साथी में आपका स्वागत है। आप अपनी समस्या बताएं..."</p>
-            <p>3. [Hindi ASR] -> Streaming Audio -> Google Cloud Speech-to-Text / Whisper</p>
-            <p>4. [Scheme Saathi Core] -> AI Context Grounding & 1 Follow-up Question</p>
-            <p>5. [Neural Hindi TTS] -> Synthesizing Voice -> Streamed back to caller leg</p>
-            <p>6. [Post Call SMS] -> Sending scheme link & helpline via SMS to caller</p>
+            <p style="color:#475569; margin:6px 0 10px 0;">{purpose_show}</p>
+            <div style="display:flex; gap:20px; font-size:0.9rem; flex-wrap:wrap;">
+                <span>📞 <strong>{L['helpline']}:</strong> {s.get('helpline', '1800-180-1551')}</span>
+                <span>🌐 <a href="{s.get('official_source')}" target="_blank">{L['official_source']}</a></span>
+            </div>
         </div>
         """, unsafe_allow_html=True)
 
-    with sim_col2:
-        st.markdown("**कॉल सिमुलेशन चलाएं:**")
-        call_scenario = st.selectbox(
-            "सिमुलेशन परिदृश्य चुनें:",
-            ["फसल नुकसान कॉल (PMFBY Call)", "किसान सम्मान निधि कॉल (PM-KISAN Call)", "शांति/मौन कॉल (Silence Timeout Handling)"]
+
+# ==============================================================================
+# TAB 3: DOCUMENT CHECKLIST (DECLUTTERED)
+# ==============================================================================
+with tab_checklist:
+    st.markdown(f"### {L['checklist_title']}")
+    st.write(L["checklist_desc"])
+
+    c_left, c_right = st.columns(2)
+    with c_left:
+        st.markdown(f"**{('Farming & Agriculture' if st.session_state.lang == 'en' else 'कृषि एवं किसान योजनाएं')}**")
+        d1 = st.checkbox("Aadhaar Card (आधार कार्ड)", value=True, key="c_aadhaar")
+        d2 = st.checkbox("Land Ownership Record / Khasra-Khatauni (खसरा-खतौनी)", key="c_land")
+        d3 = st.checkbox("Aadhaar-Seeded Bank Passbook (आधार लिंक बैंक पासबुक)", key="c_bank")
+        d4 = st.checkbox("Sowing Certificate / Patwari Declaration (बुआई प्रमाण पत्र)", key="c_sowing")
+        d5 = st.checkbox("Crop Damage Photos (within 72 hrs for PMFBY)", key="c_photo_damage")
+
+    with c_right:
+        st.markdown(f"**{('Housing, Health & Jobs' if st.session_state.lang == 'en' else 'आवास, स्वास्थ्य एवं मजदूरी')}**")
+        d6 = st.checkbox("Ration Card / Family ID (राशन कार्ड)", key="c_ration")
+        d7 = st.checkbox("MGNREGA Job Card (मनरेगा जॉब कार्ड)", key="c_jobcard")
+        d8 = st.checkbox("Current Kutcha House Geo-Tagged Photo (AwaasApp)", key="c_house")
+        d9 = st.checkbox("Passport Photographs (पासपोर्ट फोटो)", key="c_passport")
+        d10 = st.checkbox("Active Aadhaar-Linked Mobile Number (सक्रिय मोबाइल नंबर)", value=True, key="c_mobile")
+
+    score = sum([d1, d2, d3, d4, d5, d6, d7, d8, d9, d10])
+    st.progress(score / 10.0)
+    st.info(f"{L['checklist_score']} {score} / 10 documents prepared.")
+
+
+# ==============================================================================
+# TAB 4: TELEPHONY & IVR ARCHITECTURE
+# ==============================================================================
+with tab_ivr:
+    st.markdown(f"### {L['telephony_title']}")
+    st.write(L["telephony_desc"])
+
+    telephony_svc = TelephonyService()
+
+    col_sim_ctrl, col_sim_view = st.columns([1, 1])
+
+    with col_sim_ctrl:
+        st.markdown(f"#### {L['sim_title']}")
+        scenario_ivr = st.selectbox(
+            "Select Call Scenario:",
+            ["Crop Damage Call (PMFBY)", "Farmer Income Support (PM-KISAN)", "Silence / Unresponsive Caller"]
         )
-
-        if st.button("▶️ कॉल वार्तालाप चलाएं (Simulate Audio Call)", use_container_width=True):
-            if "फसल नुकसान" in call_scenario:
-                st.audio("https://raw.githubusercontent.com/datasets/gdp/master/data/gdp.csv", format="audio/mp3") if False else None
-                st.success("🗣️ **कॉलर (किसान):** 'हैलो साब, हमारी धान की फसल भारी बारिश से पानी में डूब गई है, क्या करें?'")
-                st.info("🤖 **स्कीम साथी IVR:** 'राम-राम भाई जी। यदि आपकी धान की फसल पानी में डूबी है तो 72 घंटे के भीतर टोल-फ्री 14447 पर तुरंत सूचना दर्ज कराएं। क्या आपकी फसल का बीमा कराया हुआ था?'")
-            elif "सम्मान निधि" in call_scenario:
-                st.success("🗣️ **कॉलर (किसान):** 'हमें खाद-बीज के लिए 6000 रुपये वाली सरकारी योजना का लाभ लेना है।'")
-                st.info("🤖 **स्कीम साथी IVR:** 'नमस्ते। यह पीएम-किसान योजना है। क्या आपके नाम पर ज़मीन की खतौनी दर्ज है और बैंक में आधार लिंक है?'")
+        if st.button(L["sim_btn"], use_container_width=True):
+            if "Crop" in scenario_ivr:
+                st.success("🗣️ **Caller:** 'Hello sir, my crop is underwater after yesterday\\'s heavy rain. Can I get government compensation?'")
+                st.info("🤖 **Scheme Saathi IVR:** 'Greetings. For flood and rain loss, you can claim under PMFBY. You must report this within 72 hours on toll-free 14447. Was your crop insured this season?'")
+            elif "Farmer" in scenario_ivr:
+                st.success("🗣️ **Caller:** 'I need the ₹6000 financial support scheme for farming.'")
+                st.info("🤖 **Scheme Saathi IVR:** 'Hello. That is PM-KISAN. Do you have land registered in your name and an Aadhaar-linked bank account?'")
             else:
-                silence_resp = telephony_svc.handle_silence_or_timeout("DEMO_CALL")
-                st.warning(f"🤖 **स्कीम साथी IVR (मौन हैंडलिंग):** '{silence_resp['prompt_text_hi']}'")
+                resp = telephony_svc.handle_silence_or_timeout("DEMO_CALL")
+                st.warning(f"🤖 **Scheme Saathi IVR:** '{resp['prompt_text_hi']}'")
 
-    # Complete Telephony Architecture Diagram
-    st.markdown("#### 📐 तकनीकी वास्तुकला (Technical Architecture):")
-    st.code(telephony_svc.SYSTEM_ARCHITECTURE, language="text")
-
-    st.markdown("""
-    **लागत एवं व्यवहार्यता (Cost & Feasibility in India):**
-    - **क्लाउड टेलीफोनी:** Exotel / Airtel IQ / Twilio Inbound Voice (~₹0.30 - ₹0.50 प्रति मिनट)
-    - **स्पीच-टू-टेक्स्ट (ASR):** Google Cloud Speech-to-Text 'hi-IN' (~₹0.20 प्रति मिनट)
-    - **AI रीजनिंग:** Google Gemini 2.5 Flash (~₹0.01 प्रति वार्तालाप)
-    - **टेक्स्ट-टू-स्पीच (TTS):** Google Cloud Neural2 Hindi (~₹0.10 प्रति मिनट)
-    - **कुल अनुमानित लागत:** मात्र ~₹1.00 प्रति 2 मिनट की कॉल, जिससे ग्रामीण किसानों को बिना इंटरनेट के सशक्त बनाया जा सकता है।
-    """)
-
-
-# ==============================================================================
-# TAB 5: ABOUT & CREDITS
-# ==============================================================================
-with tab_about:
-    st.markdown("### 🌾 स्कीम साथी (Scheme Saathi) के बारे में")
-    st.markdown("""
-    **प्रोजेक्ट का उद्देश्य:** 
-    डिजिटल साक्षरता की कमी और भाषा की जटिलता के कारण भारत के लाखों ग्रामीण नागरिक उन सरकारी लाभों से वंचित रह जाते हैं जिनके वे कानूनी हकदार हैं।
-    स्कीम साथी इस खाई को आर्टिफिशियल इंटेलिजेंस, सरल हिंदी भाषा और वॉइस तकनीक के जरिए पाटता है।
-
-    **मुख्य विशेषताएं:**
-    - 🗣️ **हिंदी-प्रथम इंटरफ़ेस:** बिना किसी तकनीकी जटिलता के शुद्ध सरल हिंदी में संवाद।
-    - 🎤 **ब्राउज़र वॉइस इनपुट:** बोलने और सुनने की पूर्ण सुविधा (Web Speech API + gTTS)।
-    - 🏛️ **सत्यापित डेटाबेस:** केवल pmkisan.gov.in, pmfby.gov.in, और myscheme.gov.in जैसे आधिकारिक पोर्टल्स पर आधारित तथ्य।
-    - 🛡️ **भ्रम-मुक्त व पारदर्शी:** कोई झूठी मंजूरी की गारंटी नहीं; आधिकारिक सत्यापन की आवश्यकता को स्पष्ट रेखांकित करता है।
-    - ⚡ **डुअल-इंजन आर्किटेक्चर:** Gemini AI उपलब्ध होने पर अत्याधुनिक LLM, अथवा शून्य-लागत स्मार्ट नियम-आधारित डेमो मोड।
-    - 📞 **मॉड्यूलर टेलीफोनी रेडीनेस:** भविष्य में बिना इंटरनेट वाले फीचर फोन पर टोल-फ्री आईवीआर नंबर से जुड़ने की पूर्ण रूपरेखा।
-
-    **तकनीकी स्टैक (Tech Stack):**
-    - **फ्रंटएंड व बैकएंड:** Python, Streamlit
-    - **आर्टिफिशियल इंटेलिजेंस:** Google Gemini 2.5 Flash (`google-genai` SDK)
-    - **ध्वनि प्रसंस्करण (Audio/Voice):** Web Speech API (SpeechRecognition & SpeechSynthesis), gTTS
-    - **परीक्षण (Testing):** Pytest (11/11 automated tests passed)
-    """)
-
-    st.markdown("""
-    <div class="disclaimer-box">
-        <strong>⚠️ वैधानिक अस्वीकरण (Legal Disclaimer):</strong><br>
-        स्कीम साथी एक मार्गदर्शन और सूचनात्मक सहायक है। यह किसी भी सरकारी एजेंसी का अधिकृत अंग नहीं है और न ही आधिकारिक स्वीकृति प्रदान करता है। 
-        अंतिम पात्रता, दस्तावेजों का सत्यापन और लाभ का वितरण केवल भारत सरकार और राज्य सरकारों के सक्षम विभागों के अधिकार क्षेत्र में है।
-    </div>
-    """, unsafe_allow_html=True)
+    with col_sim_view:
+        st.markdown("#### Modular Architecture Blueprint:")
+        st.code(telephony_svc.SYSTEM_ARCHITECTURE[:650] + "\n...", language="text")
